@@ -1,0 +1,128 @@
+name: snapshot
+
+# 定时生成应用快照并发布。
+#
+# 注意：本仓库不配 `on: push` 触发器。GitHub 会在仓库 60 天无活动后停用定时任务，
+# 而本工作流每天向 main 提交 data/manifest.json 本身就是活动，构成第一层防护；
+# 万一仍被停用，往 main 推任意一个 commit 即可重新激活。
+
+on:
+  schedule:
+    # 避开整点（整点排队严重，实测可能延迟 20-30 分钟）
+    # UTC 04:23 / 16:23 = 北京时间 12:23 / 00:23
+    - cron: '23 4,16 * * *'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: '忽略 ETag，全量重抓'
+        type: boolean
+        default: false
+  repository_dispatch:
+    types: [snapshot]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: snapshot
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: 检出
+        uses: actions/checkout@v4
+
+      - name: 准备 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: sync/requirements.txt
+
+      - name: 装依赖
+        run: pip install -r sync/requirements.txt
+
+      # state.json 只在 Actions 里用 cache 续命，不入库（每轮都变，入库会污染历史）。
+      # key 必须带 run_id：静态 key 会导致 cache 永不更新，恢复到的永远是第一份陈旧状态，
+      # ETag 不再变化，快照从此不再更新。
+      - name: 恢复增量状态
+        uses: actions/cache@v4
+        with:
+          path: sync/state.json
+          key: sync-state-${{ github.run_id }}
+          restore-keys: |
+            sync-state-
+
+      - name: 生成快照
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd sync
+          FLAGS=""
+          if [ "${{ inputs.force }}" = "true" ]; then FLAGS="--force"; fi
+          python3 sync.py --mode api --sleep 0.1 $FLAGS
+
+      - name: 生成 manifest
+        run: python3 sync/manifest.py --repo "${{ github.repository }}"
+
+      # 滚动 tag：URL 永久稳定，且能被 ghfast.top 等镜像代理（国内用户关键）。
+      # 标为 prerelease，避免抢走 /releases/latest（那是 App 自更新要用的）。
+      - name: 发布到滚动 Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          if ! gh release view snapshot-latest >/dev/null 2>&1; then
+            echo "滚动 Release 不存在，先创建"
+            gh release create snapshot-latest \
+              --title "数据快照（滚动）" \
+              --notes "每日自动更新的 apps.json。App 版本请到 Releases 里找，不要在这里下载。" \
+              --prerelease
+          fi
+          gh release upload snapshot-latest data/apps.json data/manifest.json --clobber
+
+      # raw 兜底：单提交强推到 snapshot-data 分支，历史永远只有 1 个 commit，
+      # 既拿到 raw.githubusercontent.com 的备用地址，又不让仓库体积膨胀。
+      - name: 同步 raw 兜底分支
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          rm -rf /tmp/snapdata && mkdir -p /tmp/snapdata
+          cp data/apps.json data/manifest.json /tmp/snapdata/
+          cd /tmp/snapdata
+          git init -q
+          git config user.name  'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -q -m "snapshot $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git push --force \
+            "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git" \
+            HEAD:snapshot-data
+
+      # apps.json 不入库（528KB × 2/天 ≈ 385MB/年），只提交 700B 的 manifest。
+      # [skip ci] + 无 push 触发器 = 防递归双保险。
+      - name: 提交 manifest
+        run: |
+          git config user.name  'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/manifest.json
+          if git diff --cached --quiet; then
+            echo "manifest 无变化，跳过提交"
+          else
+            git commit -m "chore(data): 更新快照指针 $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
+            git push
+          fi
+
+      - name: 汇总
+        run: |
+          echo "快照大小：$(wc -c < data/apps.json) 字节"
+          python3 -c "
+          import json
+          d = json.load(open('data/apps.json', encoding='utf-8'))
+          print(f'应用总数 {d[\"totalApps\"]}，可用 {d[\"availableApps\"]}，stale={d[\"stale\"]}')
+          "

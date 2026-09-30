@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-30T13:58:20+08:00",
+  "repo": "maxzhai/hapstore",
+  "snapshot": {
+    "url": "https://github.com/maxzhai/hapstore/releases/download/snapshot-latest/apps.json",
+    "altUrl": "https://raw.githubusercontent.com/maxzhai/hapstore/main/data/apps.json",
+    "size": 528051,
+    "sha256": "35a8ab8dad55ba017ef427df593b70b155c0b9982f5d8044228955cc014e8c16",
+    "schemaVersion": 2,
+    "generatedAt": "2026-09-29T18:35:37+08:00",
+    "minAppVersionCode": 1000000
+  },
+  "app": {
+    "versionCode": 1000000,
+    "versionName": "1.0.0",
+    "tag": "v1.0.0",
+    "downloadUrl": "",
+    "size": 0,
+    "sha256": "",
+    "publishedAt": "",
+    "releaseUrl": "https://github.com/maxzhai/hapstore/releases/latest",
+    "notes": ""
+  }
+}

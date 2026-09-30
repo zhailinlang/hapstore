@@ -26,9 +26,10 @@ import icons  # noqa: E402
 import tagger  # noqa: E402
 
 BASE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(BASE)
 STATE_PATH = os.path.join(BASE, 'state.json')
-PUBLIC_DIR = os.path.join(BASE, 'public')
-OUT_PATH = os.path.join(PUBLIC_DIR, 'apps.json')
+# 默认直接写仓库根下的 data/；apps.json 不入库（体积太大），只作为 Release 资产发布
+OUT_PATH = os.path.join(ROOT, 'data', 'apps.json')
 
 YAML_URL = 'https://raw.githubusercontent.com/Zitann/HarmonyOS-Haps/main/apps.yaml'
 REPO_RE = re.compile(r'github\.com/([^/]+)/([^/?#]+)')
@@ -149,8 +150,10 @@ def main():
     ap.add_argument('--no-icons', action='store_true', help='跳过图标抓取（快速重跑数据时用）')
     ap.add_argument('--force-icons', action='store_true', help='忽略本地图标缓存，重新下载')
     ap.add_argument('--icon-workers', type=int, default=6, help='图标抓取并发数')
+    ap.add_argument('--out', default=OUT_PATH, help=f'输出路径（默认 {OUT_PATH}）')
     args = ap.parse_args()
 
+    out_path = os.path.abspath(args.out)
     state = load_state()
     today = dt.date.today()
 
@@ -160,7 +163,7 @@ def main():
         text, yaml_etag, changed = fetch_yaml(state.get('yaml_etag'), args.force)
     except Exception as e:
         print(f'  拉取失败：{e}')
-        if not os.path.exists(OUT_PATH):
+        if not os.path.exists(out_path):
             sys.exit(1)
         print('  沿用上次产物，退出')
         return
@@ -420,15 +423,15 @@ def main():
         },
     }
 
-    os.makedirs(PUBLIC_DIR, exist_ok=True)
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
     # 同上：直接覆盖写，避免 os.replace 触发 unlink 被拦截
-    with open(OUT_PATH, 'w', encoding='utf-8') as f:
+    with open(out_path, 'w', encoding='utf-8') as f:
         json.dump(out, f, ensure_ascii=False, indent=2, default=str)
 
     save_state(state)
     print(f'[3/3] 完成：处理 {processed} / 复用 {reused} / 失败 {failed}')
     print(f'  可用 HAP：{ok}/{len(apps)}，stale={stale}')
-    print(f'  输出：{OUT_PATH}')
+    print(f'  输出：{out_path}')
 
 
 if __name__ == '__main__':
