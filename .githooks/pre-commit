@@ -1,0 +1,42 @@
+#!/bin/sh
+#
+# 双保险：即使 .gitignore 写错，也不让签名口令进仓库。
+# 启用：git config core.hooksPath .githooks
+#
+# 注意：只匹配「字段后面跟一长串真实值」，避免把本钩子自身、
+# check-clean.sh 和 build-profile.example.json5 里的占位符 __KEY_PASSWORD__ 误判成泄漏。
+set -e
+
+blocked=0
+
+if git diff --cached --name-only | grep -Fxq 'app/build-profile.json5'; then
+  echo "❌ 拒绝提交：app/build-profile.json5 含签名口令与本机绝对路径" >&2
+  blocked=1
+fi
+
+if git diff --cached --name-only | grep -qE '\.(p12|p7b|cer)$'; then
+  echo "❌ 拒绝提交：签名证书不能入库" >&2
+  blocked=1
+fi
+
+# 真实口令是 80+ 位十六进制；占位符 __KEY_PASSWORD__ 只有 16 字符，不会命中
+if git diff --cached -U0 | grep -qE '^\+.*"(keyPassword|storePassword)"[[:space:]]*:[[:space:]]*"[^"]{32,}"'; then
+  echo "❌ 拒绝提交：diff 中出现真实签名口令" >&2
+  blocked=1
+fi
+
+# 若本机存在签名环境文件，直接比对真实值是否出现在待提交内容里
+ENV_FILE="${HAPSTORE_SIGN_ENV:-$HOME/.hapstore-signing.env}"
+if [ -r "$ENV_FILE" ]; then
+  for key in KEY_PASSWORD STORE_PASSWORD; do
+    val=$(sed -n "s/^${key}='\(.*\)'$/\1/p" "$ENV_FILE" 2>/dev/null || true)
+    if [ -n "$val" ]; then
+      if git diff --cached | grep -qF "$val"; then
+        echo "❌ 拒绝提交：待提交内容里出现了 $key 的真实值" >&2
+        blocked=1
+      fi
+    fi
+  done
+fi
+
+exit $blocked

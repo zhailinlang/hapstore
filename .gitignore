@@ -1,0 +1,40 @@
+# ---- 依赖 / 构建产物 ----
+/node_modules
+/oh_modules
+**/oh_modules
+**/build
+**/.test
+/app/.hvigor
+/app/.hvigor/
+/app/entry/.preview
+/app/entry/oh_modules
+**/.DS_Store
+
+# ---- IDE ----
+**/.idea
+**/*.iml
+/local.properties
+.cxx
+/.clangd
+/.clang-format
+/.clang-tidy
+
+# ---- 安全：签名配置含明文口令 + 本机绝对路径，绝不能入库 ----
+/app/build-profile.json5
+*.p12
+*.p7b
+*.cer
+.env
+**/.env
+
+# ---- 生成器 ----
+/sync/state.json
+/sync/__pycache__/
+**/__pycache__/
+/sync/public/
+/data/apps.json
+
+# ---- 本地产物 ----
+/out/
+/.verify
+/.icons

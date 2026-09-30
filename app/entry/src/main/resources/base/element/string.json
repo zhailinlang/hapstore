@@ -1,0 +1,24 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "鸿蒙 HAP 应用目录与下载器"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "HAP 目录"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "HAP 目录"
+    },
+    {
+      "name": "permission_internet_reason",
+      "value": "用于下载 HAP 安装包"
+    },
+    {
+      "name": "permission_network_reason",
+      "value": "用于在无网络时给出提示"
+    }
+  ]
+}

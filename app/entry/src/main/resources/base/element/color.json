@@ -1,0 +1,68 @@
+{
+  "color": [
+    {
+      "name": "start_window_background",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "primary",
+      "value": "#0F62FE"
+    },
+    {
+      "name": "primary_light",
+      "value": "#E8F0FF"
+    },
+    {
+      "name": "background",
+      "value": "#F5F7FA"
+    },
+    {
+      "name": "card",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "text_main",
+      "value": "#1A1A1A"
+    },
+    {
+      "name": "text_sub",
+      "value": "#8A8F99"
+    },
+    {
+      "name": "divider",
+      "value": "#EDEEF2"
+    },
+    {
+      "name": "success",
+      "value": "#12A150"
+    },
+    {
+      "name": "warning",
+      "value": "#FF8800"
+    },
+    {
+      "name": "danger",
+      "value": "#E5484D"
+    },
+    {
+      "name": "chip_bg",
+      "value": "#F2F3F5"
+    },
+    {
+      "name": "success_bg",
+      "value": "#E8F8EF"
+    },
+    {
+      "name": "danger_bg",
+      "value": "#FDECEC"
+    },
+    {
+      "name": "icon_bg",
+      "value": "#F2F5FA"
+    },
+    {
+      "name": "white",
+      "value": "#FFFFFF"
+    }
+  ]
+}

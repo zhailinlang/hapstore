@@ -1,0 +1,11 @@
+{
+  "modelVersion": "26.0.0",
+  "name": "helloharmony",
+  "version": "1.0.0",
+  "description": "HarmonyOS 原生 ArkTS 起始工程",
+  "main": "",
+  "author": "",
+  "license": "",
+  "dependencies": {},
+  "devDependencies": {}
+}
