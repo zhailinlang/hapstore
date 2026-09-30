@@ -1,6 +1,6 @@
 # HapStore
 
-鸿蒙（HarmonyOS）未上架 HAP 的聚合目录 App。把散落在 87 个 GitHub 仓库 Release 里的
+鸿蒙（HarmonyOS）未上架 HAP 的聚合目录 App，基于 Zitann/HarmonyOS-Haps 的整理，把截止目前（2026-9-30）散落在 87 个 GitHub 仓库 Release 里的
 第三方 HAP 聚成一份可浏览、可搜索、可对比版本的快照，装在手机上就能看。
 
 **本仓库不托管、不修改、不重签名任何 HAP 文件。**
@@ -20,6 +20,7 @@
 ## 免责声明
 
 - 本仓库**不包含任何 HAP 文件**。App 里所有的下载直链都指向各上游项目的官方 Release。
+- 本App使用 Workbuddy Vibe Coding而来，本人自测运行正常，当然也可能存在不少bug，如果有使用问题可以提issue。
 - 各应用的版权与责任归其原作者。发现侵权内容请提 issue，会尽快下架索引。
 - App 不收集、不上传任何用户数据，全部逻辑在本地完成。
 - 数据来源：[Zitann/HarmonyOS-Haps](https://github.com/Zitann/HarmonyOS-Haps)（社区维护的清单），
