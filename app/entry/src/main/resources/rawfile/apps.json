@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-29T18:35:37+08:00",
+  "generatedAt": "2026-09-30T06:43:47+00:00",
   "stale": false,
   "totalApps": 87,
   "availableApps": 68,
@@ -526,7 +526,7 @@
           "repoUrl": "https://github.com/zhuoyi233/zhihu-plus-plus-HMOS",
           "releaseUrl": "https://github.com/zhuoyi233/zhihu-plus-plus-HMOS/releases",
           "iconUrl": "data:image/png;base64,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",
-          "updatedAt": "2026-09-25",
+          "updatedAt": "2026-09-28",
           "status": "ok",
           "release": {
             "tag": "HMOSv0.5.6",
@@ -3061,7 +3061,7 @@
           "repoUrl": "https://github.com/chashaochang/JellyFin_HarmonyOS",
           "releaseUrl": "https://github.com/chashaochang/JellyFin_HarmonyOS/releases",
           "iconUrl": "data:image/png;base64,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",
-          "updatedAt": "2025-08-02",
+          "updatedAt": "2026-08-02",
           "status": "ok",
           "release": {
             "tag": "v1.0.4",
@@ -3137,7 +3137,7 @@
           "repoUrl": "https://github.com/Yebingiscn/SweetVideo",
           "releaseUrl": "https://github.com/Yebingiscn/SweetVideo/releases",
           "iconUrl": "data:image/png;base64,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",
-          "updatedAt": "2025-07-31",
+          "updatedAt": "2026-07-31",
           "status": "no_hap",
           "release": {
             "tag": "Release_1.0.16",
@@ -3205,45 +3205,84 @@
           "updatedAt": "2026-09-25",
           "status": "ok",
           "release": {
-            "tag": "v1.1.0",
-            "name": "轻启 1.1.0",
-            "publishedAt": "2026-09-25T04:11:27Z",
+            "tag": "v1.2.0",
+            "name": "轻启 1.2.0",
+            "publishedAt": "2026-09-29T14:58:40Z",
             "hapAssets": [
               {
-                "name": "quietstart-1.1.0.hap",
-                "size": 6655349,
-                "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.1.0/quietstart-1.1.0.hap",
+                "name": "quietstart-1.2.0.hap",
+                "size": 4365069,
+                "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.2.0/quietstart-1.2.0.hap",
                 "contentType": "application/octet-stream"
               },
               {
-                "name": "xiaobai-quietstart-3.1.1-unsigned.hap",
-                "size": 34410739,
-                "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.1.0/xiaobai-quietstart-3.1.1-unsigned.hap",
+                "name": "quietstart-installer-0.4.46-device6.1-signed.hap",
+                "size": 12461186,
+                "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.2.0/quietstart-installer-0.4.46-device6.1-signed.hap",
                 "contentType": "application/octet-stream"
               }
             ],
             "otherAssets": [
               {
-                "name": "quietstart-1.1.0-macOS-arm64-bundle.zip",
-                "size": 78202259,
-                "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.1.0/quietstart-1.1.0-macOS-arm64-bundle.zip",
+                "name": "quietstart-1.2.0-macOS-arm64-bundle.zip",
+                "size": 77952728,
+                "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.2.0/quietstart-1.2.0-macOS-arm64-bundle.zip",
                 "contentType": "application/zip"
               },
               {
-                "name": "quietstart-1.1.0-Windows-x64-bundle.zip",
-                "size": 69464582,
-                "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.1.0/quietstart-1.1.0-Windows-x64-bundle.zip",
+                "name": "quietstart-1.2.0-Windows-x64-bundle.zip",
+                "size": 69215053,
+                "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.2.0/quietstart-1.2.0-Windows-x64-bundle.zip",
                 "contentType": "application/zip"
               },
               {
                 "name": "SHA256SUMS.txt",
-                "size": 403,
-                "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.1.0/SHA256SUMS.txt",
+                "size": 414,
+                "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.2.0/SHA256SUMS.txt",
                 "contentType": "text/plain; charset=utf-8"
               }
             ]
           },
           "releases": [
+            {
+              "tag": "v1.2.0",
+              "name": "轻启 1.2.0",
+              "publishedAt": "2026-09-29T14:58:40Z",
+              "hapAssets": [
+                {
+                  "name": "quietstart-1.2.0.hap",
+                  "size": 4365069,
+                  "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.2.0/quietstart-1.2.0.hap",
+                  "contentType": "application/octet-stream"
+                },
+                {
+                  "name": "quietstart-installer-0.4.46-device6.1-signed.hap",
+                  "size": 12461186,
+                  "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.2.0/quietstart-installer-0.4.46-device6.1-signed.hap",
+                  "contentType": "application/octet-stream"
+                }
+              ],
+              "otherAssets": [
+                {
+                  "name": "quietstart-1.2.0-macOS-arm64-bundle.zip",
+                  "size": 77952728,
+                  "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.2.0/quietstart-1.2.0-macOS-arm64-bundle.zip",
+                  "contentType": "application/zip"
+                },
+                {
+                  "name": "quietstart-1.2.0-Windows-x64-bundle.zip",
+                  "size": 69215053,
+                  "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.2.0/quietstart-1.2.0-Windows-x64-bundle.zip",
+                  "contentType": "application/zip"
+                },
+                {
+                  "name": "SHA256SUMS.txt",
+                  "size": 414,
+                  "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.2.0/SHA256SUMS.txt",
+                  "contentType": "text/plain; charset=utf-8"
+                }
+              ]
+            },
             {
               "tag": "v1.1.0",
               "name": "轻启 1.1.0",
@@ -3282,78 +3321,39 @@
                   "contentType": "text/plain; charset=utf-8"
                 }
               ]
-            },
-            {
-              "tag": "v1.0.0",
-              "name": "轻启 1.0.0",
-              "publishedAt": "2026-09-16T23:20:03Z",
-              "hapAssets": [
-                {
-                  "name": "quietstart-1.0.0.hap",
-                  "size": 4442134,
-                  "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.0.0/quietstart-1.0.0.hap",
-                  "contentType": "application/octet-stream"
-                },
-                {
-                  "name": "xiaobai-quietstart-3.1.1-unsigned.hap",
-                  "size": 34410739,
-                  "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.0.0/xiaobai-quietstart-3.1.1-unsigned.hap",
-                  "contentType": "application/octet-stream"
-                }
-              ],
-              "otherAssets": [
-                {
-                  "name": "quietstart-1.0.0-macOS-arm64-bundle.zip",
-                  "size": 77572557,
-                  "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.0.0/quietstart-1.0.0-macOS-arm64-bundle.zip",
-                  "contentType": "application/zip"
-                },
-                {
-                  "name": "quietstart-1.0.0-Windows-x64-bundle.zip",
-                  "size": 68834888,
-                  "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.0.0/quietstart-1.0.0-Windows-x64-bundle.zip",
-                  "contentType": "application/zip"
-                },
-                {
-                  "name": "SHA256SUMS.txt",
-                  "size": 403,
-                  "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.0.0/SHA256SUMS.txt",
-                  "contentType": "text/plain; charset=utf-8"
-                }
-              ]
             }
           ],
           "hapAssets": [
             {
-              "name": "quietstart-1.1.0.hap",
-              "size": 6655349,
-              "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.1.0/quietstart-1.1.0.hap",
+              "name": "quietstart-1.2.0.hap",
+              "size": 4365069,
+              "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.2.0/quietstart-1.2.0.hap",
               "contentType": "application/octet-stream"
             },
             {
-              "name": "xiaobai-quietstart-3.1.1-unsigned.hap",
-              "size": 34410739,
-              "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.1.0/xiaobai-quietstart-3.1.1-unsigned.hap",
+              "name": "quietstart-installer-0.4.46-device6.1-signed.hap",
+              "size": 12461186,
+              "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.2.0/quietstart-installer-0.4.46-device6.1-signed.hap",
               "contentType": "application/octet-stream"
             }
           ],
           "otherAssets": [
             {
-              "name": "quietstart-1.1.0-macOS-arm64-bundle.zip",
-              "size": 78202259,
-              "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.1.0/quietstart-1.1.0-macOS-arm64-bundle.zip",
+              "name": "quietstart-1.2.0-macOS-arm64-bundle.zip",
+              "size": 77952728,
+              "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.2.0/quietstart-1.2.0-macOS-arm64-bundle.zip",
               "contentType": "application/zip"
             },
             {
-              "name": "quietstart-1.1.0-Windows-x64-bundle.zip",
-              "size": 69464582,
-              "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.1.0/quietstart-1.1.0-Windows-x64-bundle.zip",
+              "name": "quietstart-1.2.0-Windows-x64-bundle.zip",
+              "size": 69215053,
+              "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.2.0/quietstart-1.2.0-Windows-x64-bundle.zip",
               "contentType": "application/zip"
             },
             {
               "name": "SHA256SUMS.txt",
-              "size": 403,
-              "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.1.0/SHA256SUMS.txt",
+              "size": 414,
+              "downloadUrl": "https://github.com/thx853068675-dev/quietstart/releases/download/v1.2.0/SHA256SUMS.txt",
               "contentType": "text/plain; charset=utf-8"
             }
           ],
@@ -3376,7 +3376,7 @@
           "repoUrl": "https://github.com/mason173/aira-browser",
           "releaseUrl": "https://github.com/mason173/aira-browser/releases",
           "iconUrl": "data:image/png;base64,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",
-          "updatedAt": "2026-09-28",
+          "updatedAt": "2026-09-29",
           "status": "ok",
           "release": {
             "tag": "v3.5.2",
@@ -5404,20 +5404,34 @@
           "updatedAt": "2026-09-24",
           "status": "ok",
           "release": {
-            "tag": "v1.10.0",
-            "name": "Karing Harmony 1.10.0",
-            "publishedAt": "2026-09-24T09:48:17Z",
+            "tag": "v1.11.0",
+            "name": "Karing Harmony 1.11.0",
+            "publishedAt": "2026-09-29T23:52:19Z",
             "hapAssets": [
               {
-                "name": "karing-harmony-1.10.0.hap",
-                "size": 48424888,
-                "downloadUrl": "https://github.com/ks-lm-kf/harmony-kslmkf-karing-hap/releases/download/v1.10.0/karing-harmony-1.10.0.hap",
+                "name": "karing-harmony-1.11.0.hap",
+                "size": 48441498,
+                "downloadUrl": "https://github.com/ks-lm-kf/harmony-kslmkf-karing-hap/releases/download/v1.11.0/karing-harmony-1.11.0.hap",
                 "contentType": "application/octet-stream"
               }
             ],
             "otherAssets": []
           },
           "releases": [
+            {
+              "tag": "v1.11.0",
+              "name": "Karing Harmony 1.11.0",
+              "publishedAt": "2026-09-29T23:52:19Z",
+              "hapAssets": [
+                {
+                  "name": "karing-harmony-1.11.0.hap",
+                  "size": 48441498,
+                  "downloadUrl": "https://github.com/ks-lm-kf/harmony-kslmkf-karing-hap/releases/download/v1.11.0/karing-harmony-1.11.0.hap",
+                  "contentType": "application/octet-stream"
+                }
+              ],
+              "otherAssets": []
+            },
             {
               "tag": "v1.10.0",
               "name": "Karing Harmony 1.10.0",
@@ -5431,27 +5445,13 @@
                 }
               ],
               "otherAssets": []
-            },
-            {
-              "tag": "v1.0.9-beta",
-              "name": "Karing Harmony 1.0.9-beta",
-              "publishedAt": "2026-08-02T15:48:17Z",
-              "hapAssets": [
-                {
-                  "name": "karing-harmony-1.0.9-beta.hap",
-                  "size": 36705035,
-                  "downloadUrl": "https://github.com/ks-lm-kf/harmony-kslmkf-karing-hap/releases/download/v1.0.9-beta/karing-harmony-1.0.9-beta.hap",
-                  "contentType": "application/octet-stream"
-                }
-              ],
-              "otherAssets": []
             }
           ],
           "hapAssets": [
             {
-              "name": "karing-harmony-1.10.0.hap",
-              "size": 48424888,
-              "downloadUrl": "https://github.com/ks-lm-kf/harmony-kslmkf-karing-hap/releases/download/v1.10.0/karing-harmony-1.10.0.hap",
+              "name": "karing-harmony-1.11.0.hap",
+              "size": 48441498,
+              "downloadUrl": "https://github.com/ks-lm-kf/harmony-kslmkf-karing-hap/releases/download/v1.11.0/karing-harmony-1.11.0.hap",
               "contentType": "application/octet-stream"
             }
           ],
@@ -5473,7 +5473,7 @@
           "repoUrl": "https://github.com/dgh1818/immich_ohos",
           "releaseUrl": "https://github.com/dgh1818/immich_ohos/releases",
           "iconUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAADAFBMVEX+/v7yJBYchvUNvTz6vgD6wAHxFQciivURvj0AuSwTv0ALfvXl9ufZ6fvq8/z99+j619b6whj6yjpGm/X72GsYwEL6zUYkwkip5bT889bD3vn2jYkOgPU5lPT60lT6ysj5trT85uaG25n72nr1Y1v3mJZssPWs0fnyHRBZpfX6xSZ6t/fzRDv85qdLzGds1IL74I5414v87sP1a2fzPDS52frxLiXY89z2gXz73oe66cNj0nne9ePH7s5MoPXzNCr1fHdUzWwrxFDzS0Sa4amjzvubyPjyVE05yFuDvPeS3qL98c3P79ctkPVlrPa26b/5wL+l46/7z1D2cWr5pqKU3p/3op7yDgD87L784pHzWVONwfcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABR9IUxAAAC40lEQVR42u2X53biMBCFhW1ckDGxqSmQAEsLIT0hvW02bXtv7/8eO2pYJhyDzNl/mWOCMdzPd0Yz8glCL/GfY611ddRaTSxfvjRp3NcTyRf2zRQL83AhgX41JfRAuFfX1w9DPRDU67An61PmsnICEX3KvFIFvBoDqDqop6JhflJtoDED+6oZtMYAP1QBX6Nr8BrNV8PuwnwAs4XmAph74uru70KtVtjenQFwJM3BBruUO143eKw3F6cBvkkOWAGOfcNI8wBGc9ood0cG1ujtS6GcMYJcPGHDlAvw1jfojenNyRkc6/GEZZFDXegZggAoJ22UZhkG84j494nI4IfB/6aN7Rks0I0kYK5HFgxO8eOTIDti9xJOBiJ1Q9LTT4OoYumx3X5cChfC5D3gCwGvIkuH2CnIcq+HSWjVO2mkuzBFi6Xal8A3xDIavBOeAarYoqHhvHCxlvrJuxDlfhX80IUoqAzoY0tjAe99kcWfw/AXuaYRrmR6fBk8IacEXBUmaBu7Oy79sFhitWNqOKSJOFiRCMREOxt+6er2Ezs75tVkdahJGbzBMgACa70OZXjwutGdUyRMjPSRXn4GsLQVWJH8Rd4CTFkvOtf8l4OAd0IQGeloCgxBr+ALSMHWgbA12laapSCojTWRp00MgBwgdK4DIeN8jm3c3nMLBIA/wHcNJ6MDo+jGAbITDWhVVkNwABZ2Yi3c4Ql6UkFUIQamW0B/sWaN+ad6WANigFi4jd/FOhbmpWflwz3iH20xA8TC5pSd1OtbeGXUSPkOvfhR6AFQnvo48DrtPPHwPt/n0+BmeAKU8G6Wh5KXzUpzsKkLAwRwovyIu3VCPVSxoqqHJrbnAmzJBiCZE3UDkbBdRUAjYsDWH1Qz2JQrMHUYJkQ5ArD14VyAjNjWFOJBAsCCnikDGk5xpE/QBLCMZd7IdkZ3vif5p+XcdvQMhO7YFZQohte6A1E8PUNJY1hpPJ246CXi4h9u5zhvEoLCJQAAAABJRU5ErkJggg==",
-          "updatedAt": "2026-07-28",
+          "updatedAt": "2026-09-29",
           "status": "ok",
           "release": {
             "tag": "v3.2.1-ohos-v0.0.5",
@@ -5964,7 +5964,7 @@
           "repoUrl": "https://github.com/Amview/soc-search",
           "releaseUrl": "https://github.com/Amview/soc-search/releases",
           "iconUrl": "data:image/png;base64,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",
-          "updatedAt": "2025-09-23",
+          "updatedAt": "2026-09-23",
           "status": "ok",
           "release": {
             "tag": "1.0.25",
@@ -6054,7 +6054,7 @@
           "repoUrl": "https://github.com/SummerKaze/AppBundleNameForShared",
           "releaseUrl": "https://github.com/SummerKaze/AppBundleNameForShared/releases",
           "iconUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAADAFBMVEX+/v7kfSjgYirYIil7d3jbRCnXHCbVEhzdVyflgCuYlZaBfX6IhIXo5+fGxMTjdhzY19fYNxu4treopabphovaOSf0xsiRjY777OfrmIvgVFvdVhyDf4DgTlTVDhnmhznxuKfbNDz43N321brkeGTxt7bjZGrdQkryw5zjdVTofYL48uzqnFvtqG7vsH7tnaD66Nnja1dybW7qmGX218TlbHLniFX0zazuq3Twt4foj0TgXSzngXD54c787/DdSTDrj5TAvr/gV0iwra7iWWDg39/aKjPtmZzwqq7plEvkeD7wrbDvs4HvsZXmdnzfSVDuq4zfYCbdOUGhnp/zv8LeXDCjn6Dws5gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD0T0IKAAACcklEQVR42u2V2XraMBCFjT2WjSQv2DFQIJCwBAhJmq1tuqZL0n1f3/9NqsUGkzRUUm5ykfMZm5v5NXNmJFnWrW62gjDmnzAJDAHhIZyzDz5smAKAsLUDAqkxAOLibQoILesVUFMPWPKJZaXQMG4Dhd/MQ8DGgB9ArwcQJhSAwMDKgLLg3IOE6FlRF++UtTDhXQgwAGg1Y3Mt7wNO+BxgIDTUymCzKwgJkAaF5AVoOzlGniA0gBBCKW+Hnu55jiAEhHTYA6EuoO45khADI3SI/jS/QXMCUNK51OHkP/H9586cwBwgabwcTmElob7lsBI44U4+DkBwEos6ZkGYUljZluZn5CEHISdz3ZogxHyOWCkNjDEl4u8KV+vf2eqOCHcLghWLVXNRvKopI546+7m5cgJjhClLAKd5KVeuj5bjSwQl9V/LeN83JLR4/Y7j+kuEDeX4uyIeubZfIpzWnqhvQlmAbUtCVpMaaSfA5bd/TafD4cHBUL2C9dxBAfj2tam7gfpyBDKZwIb+Ifq2VIF/3+AY35Y9FBW0/xgAtryFBW2DCgoPbeMSygDbfvfwZPfk42TQ1JzjAlCpREKV3tFA4yguAapSHPTogRpgrWSibbNQKQaJdpQK+YnEHPhFDQtVo96xAqAp95J7GVBh6QyUByErTKgs66nCfYQWo3ghBYbrzVQb+e8UqtHuNVOIdlQ62S2lYF9wYV+llWdeuRFlQqQ2Tc++XEGIJorz3Gx1xcWyRGDvica5gngSOYEj2Cj3Bjrbur7ueQhlj+fbsro30zwZRi3H63oZuxvabf/93r7B4dL/sN0aj19Ojz4dW7e66foLNSMsriT1KKcAAAAASUVORK5CYII=",
-          "updatedAt": "2025-09-14",
+          "updatedAt": "2026-09-14",
           "status": "ok",
           "release": {
             "tag": "V1.2",
@@ -6126,7 +6126,7 @@
           "repoUrl": "https://github.com/kdada/Authenticator",
           "releaseUrl": "https://github.com/kdada/Authenticator/releases",
           "iconUrl": "data:image/png;base64,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",
-          "updatedAt": "2025-08-25",
+          "updatedAt": "2026-08-25",
           "status": "no_hap",
           "release": {
             "tag": "v1.0.16",
@@ -6170,7 +6170,7 @@
           "repoUrl": "https://github.com/Luo-A-Chen/AwesomeResume",
           "releaseUrl": "https://github.com/Luo-A-Chen/AwesomeResume/releases",
           "iconUrl": "data:image/png;base64,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",
-          "updatedAt": "2025-08-02",
+          "updatedAt": "2026-08-02",
           "status": "ok",
           "release": {
             "tag": "v2025.8.3+2",
@@ -6321,7 +6321,7 @@
           "repoUrl": "https://github.com/shokakucarrier/neon-ohos",
           "releaseUrl": "https://github.com/shokakucarrier/neon-ohos/releases",
           "iconUrl": "data:image/png;base64,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",
-          "updatedAt": "2025-07-01",
+          "updatedAt": "2026-07-01",
           "status": "ok",
           "release": {
             "tag": "neon-ohos-v1.0.0",
@@ -6382,7 +6382,7 @@
           "repoUrl": "https://github.com/Aloereed/localsend-ohos",
           "releaseUrl": "https://github.com/Aloereed/localsend-ohos/releases",
           "iconUrl": "data:image/png;base64,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",
-          "updatedAt": "2025-04-15",
+          "updatedAt": "2026-04-15",
           "status": "ok",
           "release": {
             "tag": "1.17.2+60",
@@ -6447,7 +6447,7 @@
           "repoUrl": "https://github.com/CatPawApp/CatPawOpen",
           "releaseUrl": "https://github.com/CatPawApp/CatPawOpen/releases",
           "iconUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAADAFBMVEXw8PDRo3ru6+nw8O/UqYPw7+7Ys5LQnnPgyrbl1sjr49zcvaLOmWrp3tUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADkNYJGAAAAqUlEQVR42u2Wyw6EIAxF+7CgDv7/704yw0MnRqREF07PsgmnXQC9AE+GJcP9svYjAot7RdwEpBBMAf0HDKNOgAmvFHgTaAX85VcQyy03aiM4358SvJ0gIZUrT0MBC6U4g1QEeIwJ/kOAvQKXWc0ylCqBXPuY7Et7nKB7NwYfUW1nhnnMLJqEwZ0JZbUihASMmwPqMdf3pwot+WAX240muDsf7NOQD4yzvAEPMwxwCRUluQAAAABJRU5ErkJggg==",
-          "updatedAt": "2025-01-17",
+          "updatedAt": "2026-01-17",
           "status": "ok",
           "release": {
             "tag": "beta",
@@ -6544,7 +6544,7 @@
           "repoUrl": "https://github.com/Luxcis/Pokedex_Next",
           "releaseUrl": "https://github.com/Luxcis/Pokedex_Next/releases",
           "iconUrl": "data:image/png;base64,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",
-          "updatedAt": "2025-01-07",
+          "updatedAt": "2026-01-07",
           "status": "ok",
           "release": {
             "tag": "v1.0.0",
@@ -6957,129 +6957,276 @@
           "updatedAt": "2026-08-31",
           "status": "ok",
           "release": {
-            "tag": "v0.1.3",
-            "name": "v0.1.3",
-            "publishedAt": "2026-08-22T16:43:00Z",
+            "tag": "v0.6.0",
+            "name": "v0.6.0 (LTS)",
+            "publishedAt": "2026-09-29T15:33:02Z",
             "hapAssets": [
               {
                 "name": "servo-aarch64-linux-ohos.hap",
-                "size": 97800697,
-                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-aarch64-linux-ohos.hap",
+                "size": 98123180,
+                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-linux-ohos.hap",
                 "contentType": "application/octet-stream"
               }
             ],
             "otherAssets": [
               {
                 "name": "servo-aarch64-android.aar",
-                "size": 55089630,
-                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-aarch64-android.aar",
+                "size": 39730064,
+                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-android.aar",
                 "contentType": "application/octet-stream"
               },
               {
                 "name": "servo-aarch64-android.aar.sha256",
                 "size": 91,
-                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-aarch64-android.aar.sha256",
+                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-android.aar.sha256",
                 "contentType": "application/octet-stream"
               },
               {
                 "name": "servo-aarch64-android.apk",
-                "size": 164916691,
-                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-aarch64-android.apk",
+                "size": 115544260,
+                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-android.apk",
                 "contentType": "application/vnd.android.package-archive"
               },
               {
                 "name": "servo-aarch64-android.apk.sha256",
                 "size": 91,
-                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-aarch64-android.apk.sha256",
+                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-android.apk.sha256",
                 "contentType": "application/octet-stream"
               },
               {
                 "name": "servo-aarch64-apple-darwin.dmg",
-                "size": 112691132,
-                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-aarch64-apple-darwin.dmg",
-                "contentType": "application/x-apple-diskimage"
+                "size": 114018136,
+                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-apple-darwin.dmg",
+                "contentType": "application/x-diskcopy"
               },
               {
                 "name": "servo-aarch64-apple-darwin.dmg.sha256",
+                "size": 107,
+                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-apple-darwin.dmg.sha256",
+                "contentType": "application/octet-stream"
+              },
+              {
+                "name": "servo-aarch64-linux-gnu.tar.gz",
+                "size": 48111347,
+                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-linux-gnu.tar.gz",
+                "contentType": "application/x-tar"
+              },
+              {
+                "name": "servo-aarch64-linux-gnu.tar.gz.sha256",
                 "size": 96,
-                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-aarch64-apple-darwin.dmg.sha256",
+                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-linux-gnu.tar.gz.sha256",
                 "contentType": "application/octet-stream"
               },
               {
                 "name": "servo-aarch64-linux-ohos.hap.sha256",
                 "size": 94,
-                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-aarch64-linux-ohos.hap.sha256",
+                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-linux-ohos.hap.sha256",
                 "contentType": "application/octet-stream"
               },
               {
                 "name": "servo-aarch64-linux-ohos.so",
-                "size": 117160744,
-                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-aarch64-linux-ohos.so",
+                "size": 123348600,
+                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-linux-ohos.so",
                 "contentType": "application/octet-stream"
               },
               {
                 "name": "servo-aarch64-linux-ohos.so.sha256",
                 "size": 93,
-                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-aarch64-linux-ohos.so.sha256",
+                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-linux-ohos.so.sha256",
                 "contentType": "application/octet-stream"
               },
               {
-                "name": "servo-v0.1.3-src-vendored.tar.gz",
-                "size": 378043259,
-                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-v0.1.3-src-vendored.tar.gz",
+                "name": "servo-v0.6.0-src-vendored.tar.gz",
+                "size": 385871348,
+                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-v0.6.0-src-vendored.tar.gz",
                 "contentType": "application/x-gtar"
               },
               {
                 "name": "servo-x86_64-apple-darwin.dmg",
-                "size": 114929932,
-                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-x86_64-apple-darwin.dmg",
-                "contentType": "application/x-apple-diskimage"
+                "size": 117491671,
+                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-x86_64-apple-darwin.dmg",
+                "contentType": "application/x-diskcopy"
               },
               {
                 "name": "servo-x86_64-apple-darwin.dmg.sha256",
-                "size": 95,
-                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-x86_64-apple-darwin.dmg.sha256",
+                "size": 96,
+                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-x86_64-apple-darwin.dmg.sha256",
                 "contentType": "application/octet-stream"
               },
               {
                 "name": "servo-x86_64-linux-gnu.tar.gz",
-                "size": 48459069,
-                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-x86_64-linux-gnu.tar.gz",
+                "size": 49202383,
+                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-x86_64-linux-gnu.tar.gz",
                 "contentType": "application/x-tar"
               },
               {
                 "name": "servo-x86_64-linux-gnu.tar.gz.sha256",
                 "size": 95,
-                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-x86_64-linux-gnu.tar.gz.sha256",
+                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-x86_64-linux-gnu.tar.gz.sha256",
                 "contentType": "application/octet-stream"
               },
               {
                 "name": "servo-x86_64-windows-msvc.exe",
-                "size": 143159071,
-                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-x86_64-windows-msvc.exe",
+                "size": 114281043,
+                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-x86_64-windows-msvc.exe",
                 "contentType": "application/x-msdos-program"
               },
               {
                 "name": "servo-x86_64-windows-msvc.exe.sha256",
                 "size": 95,
-                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-x86_64-windows-msvc.exe.sha256",
+                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-x86_64-windows-msvc.exe.sha256",
                 "contentType": "application/octet-stream"
               },
               {
                 "name": "servo-x86_64-windows-msvc.zip",
-                "size": 102442598,
-                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-x86_64-windows-msvc.zip",
+                "size": 103186894,
+                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-x86_64-windows-msvc.zip",
                 "contentType": "application/zip"
               },
               {
                 "name": "servo-x86_64-windows-msvc.zip.sha256",
                 "size": 95,
-                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-x86_64-windows-msvc.zip.sha256",
+                "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-x86_64-windows-msvc.zip.sha256",
                 "contentType": "application/octet-stream"
               }
             ]
           },
           "releases": [
+            {
+              "tag": "v0.6.0",
+              "name": "v0.6.0 (LTS)",
+              "publishedAt": "2026-09-29T15:33:02Z",
+              "hapAssets": [
+                {
+                  "name": "servo-aarch64-linux-ohos.hap",
+                  "size": 98123180,
+                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-linux-ohos.hap",
+                  "contentType": "application/octet-stream"
+                }
+              ],
+              "otherAssets": [
+                {
+                  "name": "servo-aarch64-android.aar",
+                  "size": 39730064,
+                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-android.aar",
+                  "contentType": "application/octet-stream"
+                },
+                {
+                  "name": "servo-aarch64-android.aar.sha256",
+                  "size": 91,
+                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-android.aar.sha256",
+                  "contentType": "application/octet-stream"
+                },
+                {
+                  "name": "servo-aarch64-android.apk",
+                  "size": 115544260,
+                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-android.apk",
+                  "contentType": "application/vnd.android.package-archive"
+                },
+                {
+                  "name": "servo-aarch64-android.apk.sha256",
+                  "size": 91,
+                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-android.apk.sha256",
+                  "contentType": "application/octet-stream"
+                },
+                {
+                  "name": "servo-aarch64-apple-darwin.dmg",
+                  "size": 114018136,
+                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-apple-darwin.dmg",
+                  "contentType": "application/x-diskcopy"
+                },
+                {
+                  "name": "servo-aarch64-apple-darwin.dmg.sha256",
+                  "size": 107,
+                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-apple-darwin.dmg.sha256",
+                  "contentType": "application/octet-stream"
+                },
+                {
+                  "name": "servo-aarch64-linux-gnu.tar.gz",
+                  "size": 48111347,
+                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-linux-gnu.tar.gz",
+                  "contentType": "application/x-tar"
+                },
+                {
+                  "name": "servo-aarch64-linux-gnu.tar.gz.sha256",
+                  "size": 96,
+                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-linux-gnu.tar.gz.sha256",
+                  "contentType": "application/octet-stream"
+                },
+                {
+                  "name": "servo-aarch64-linux-ohos.hap.sha256",
+                  "size": 94,
+                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-linux-ohos.hap.sha256",
+                  "contentType": "application/octet-stream"
+                },
+                {
+                  "name": "servo-aarch64-linux-ohos.so",
+                  "size": 123348600,
+                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-linux-ohos.so",
+                  "contentType": "application/octet-stream"
+                },
+                {
+                  "name": "servo-aarch64-linux-ohos.so.sha256",
+                  "size": 93,
+                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-linux-ohos.so.sha256",
+                  "contentType": "application/octet-stream"
+                },
+                {
+                  "name": "servo-v0.6.0-src-vendored.tar.gz",
+                  "size": 385871348,
+                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-v0.6.0-src-vendored.tar.gz",
+                  "contentType": "application/x-gtar"
+                },
+                {
+                  "name": "servo-x86_64-apple-darwin.dmg",
+                  "size": 117491671,
+                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-x86_64-apple-darwin.dmg",
+                  "contentType": "application/x-diskcopy"
+                },
+                {
+                  "name": "servo-x86_64-apple-darwin.dmg.sha256",
+                  "size": 96,
+                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-x86_64-apple-darwin.dmg.sha256",
+                  "contentType": "application/octet-stream"
+                },
+                {
+                  "name": "servo-x86_64-linux-gnu.tar.gz",
+                  "size": 49202383,
+                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-x86_64-linux-gnu.tar.gz",
+                  "contentType": "application/x-tar"
+                },
+                {
+                  "name": "servo-x86_64-linux-gnu.tar.gz.sha256",
+                  "size": 95,
+                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-x86_64-linux-gnu.tar.gz.sha256",
+                  "contentType": "application/octet-stream"
+                },
+                {
+                  "name": "servo-x86_64-windows-msvc.exe",
+                  "size": 114281043,
+                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-x86_64-windows-msvc.exe",
+                  "contentType": "application/x-msdos-program"
+                },
+                {
+                  "name": "servo-x86_64-windows-msvc.exe.sha256",
+                  "size": 95,
+                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-x86_64-windows-msvc.exe.sha256",
+                  "contentType": "application/octet-stream"
+                },
+                {
+                  "name": "servo-x86_64-windows-msvc.zip",
+                  "size": 103186894,
+                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-x86_64-windows-msvc.zip",
+                  "contentType": "application/zip"
+                },
+                {
+                  "name": "servo-x86_64-windows-msvc.zip.sha256",
+                  "size": 95,
+                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-x86_64-windows-msvc.zip.sha256",
+                  "contentType": "application/octet-stream"
+                }
+              ]
+            },
             {
               "tag": "v0.1.3",
               "name": "v0.1.3",
@@ -7202,258 +7349,135 @@
                   "contentType": "application/octet-stream"
                 }
               ]
-            },
-            {
-              "tag": "v0.5.0",
-              "name": "v0.5.0",
-              "publishedAt": "2026-08-31T10:20:07Z",
-              "hapAssets": [
-                {
-                  "name": "servo-aarch64-linux-ohos.hap",
-                  "size": 99856234,
-                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.5.0/servo-aarch64-linux-ohos.hap",
-                  "contentType": "application/octet-stream"
-                }
-              ],
-              "otherAssets": [
-                {
-                  "name": "servo-aarch64-android.aar",
-                  "size": 41010740,
-                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.5.0/servo-aarch64-android.aar",
-                  "contentType": "application/octet-stream"
-                },
-                {
-                  "name": "servo-aarch64-android.aar.sha256",
-                  "size": 91,
-                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.5.0/servo-aarch64-android.aar.sha256",
-                  "contentType": "application/octet-stream"
-                },
-                {
-                  "name": "servo-aarch64-android.apk",
-                  "size": 121000962,
-                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.5.0/servo-aarch64-android.apk",
-                  "contentType": "application/vnd.android.package-archive"
-                },
-                {
-                  "name": "servo-aarch64-android.apk.sha256",
-                  "size": 91,
-                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.5.0/servo-aarch64-android.apk.sha256",
-                  "contentType": "application/octet-stream"
-                },
-                {
-                  "name": "servo-aarch64-apple-darwin.dmg",
-                  "size": 115005467,
-                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.5.0/servo-aarch64-apple-darwin.dmg",
-                  "contentType": "application/x-diskcopy"
-                },
-                {
-                  "name": "servo-aarch64-apple-darwin.dmg.sha256",
-                  "size": 107,
-                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.5.0/servo-aarch64-apple-darwin.dmg.sha256",
-                  "contentType": "application/octet-stream"
-                },
-                {
-                  "name": "servo-aarch64-linux-gnu.tar.gz",
-                  "size": 49096776,
-                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.5.0/servo-aarch64-linux-gnu.tar.gz",
-                  "contentType": "application/x-tar"
-                },
-                {
-                  "name": "servo-aarch64-linux-gnu.tar.gz.sha256",
-                  "size": 96,
-                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.5.0/servo-aarch64-linux-gnu.tar.gz.sha256",
-                  "contentType": "application/octet-stream"
-                },
-                {
-                  "name": "servo-aarch64-linux-ohos.hap.sha256",
-                  "size": 94,
-                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.5.0/servo-aarch64-linux-ohos.hap.sha256",
-                  "contentType": "application/octet-stream"
-                },
-                {
-                  "name": "servo-aarch64-linux-ohos.so",
-                  "size": 122727384,
-                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.5.0/servo-aarch64-linux-ohos.so",
-                  "contentType": "application/octet-stream"
-                },
-                {
-                  "name": "servo-aarch64-linux-ohos.so.sha256",
-                  "size": 93,
-                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.5.0/servo-aarch64-linux-ohos.so.sha256",
-                  "contentType": "application/octet-stream"
-                },
-                {
-                  "name": "servo-v0.5.0-src-vendored.tar.gz",
-                  "size": 378765844,
-                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.5.0/servo-v0.5.0-src-vendored.tar.gz",
-                  "contentType": "application/x-gtar"
-                },
-                {
-                  "name": "servo-x86_64-apple-darwin.dmg",
-                  "size": 118411279,
-                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.5.0/servo-x86_64-apple-darwin.dmg",
-                  "contentType": "application/x-diskcopy"
-                },
-                {
-                  "name": "servo-x86_64-apple-darwin.dmg.sha256",
-                  "size": 96,
-                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.5.0/servo-x86_64-apple-darwin.dmg.sha256",
-                  "contentType": "application/octet-stream"
-                },
-                {
-                  "name": "servo-x86_64-linux-gnu.tar.gz",
-                  "size": 49966475,
-                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.5.0/servo-x86_64-linux-gnu.tar.gz",
-                  "contentType": "application/x-tar"
-                },
-                {
-                  "name": "servo-x86_64-linux-gnu.tar.gz.sha256",
-                  "size": 95,
-                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.5.0/servo-x86_64-linux-gnu.tar.gz.sha256",
-                  "contentType": "application/octet-stream"
-                },
-                {
-                  "name": "servo-x86_64-windows-msvc.exe",
-                  "size": 115432559,
-                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.5.0/servo-x86_64-windows-msvc.exe",
-                  "contentType": "application/x-msdos-program"
-                },
-                {
-                  "name": "servo-x86_64-windows-msvc.exe.sha256",
-                  "size": 95,
-                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.5.0/servo-x86_64-windows-msvc.exe.sha256",
-                  "contentType": "application/octet-stream"
-                },
-                {
-                  "name": "servo-x86_64-windows-msvc.zip",
-                  "size": 103986254,
-                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.5.0/servo-x86_64-windows-msvc.zip",
-                  "contentType": "application/zip"
-                },
-                {
-                  "name": "servo-x86_64-windows-msvc.zip.sha256",
-                  "size": 95,
-                  "downloadUrl": "https://github.com/servo/servo/releases/download/v0.5.0/servo-x86_64-windows-msvc.zip.sha256",
-                  "contentType": "application/octet-stream"
-                }
-              ]
             }
           ],
           "hapAssets": [
             {
               "name": "servo-aarch64-linux-ohos.hap",
-              "size": 97800697,
-              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-aarch64-linux-ohos.hap",
+              "size": 98123180,
+              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-linux-ohos.hap",
               "contentType": "application/octet-stream"
             }
           ],
           "otherAssets": [
             {
               "name": "servo-aarch64-android.aar",
-              "size": 55089630,
-              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-aarch64-android.aar",
+              "size": 39730064,
+              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-android.aar",
               "contentType": "application/octet-stream"
             },
             {
               "name": "servo-aarch64-android.aar.sha256",
               "size": 91,
-              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-aarch64-android.aar.sha256",
+              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-android.aar.sha256",
               "contentType": "application/octet-stream"
             },
             {
               "name": "servo-aarch64-android.apk",
-              "size": 164916691,
-              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-aarch64-android.apk",
+              "size": 115544260,
+              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-android.apk",
               "contentType": "application/vnd.android.package-archive"
             },
             {
               "name": "servo-aarch64-android.apk.sha256",
               "size": 91,
-              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-aarch64-android.apk.sha256",
+              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-android.apk.sha256",
               "contentType": "application/octet-stream"
             },
             {
               "name": "servo-aarch64-apple-darwin.dmg",
-              "size": 112691132,
-              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-aarch64-apple-darwin.dmg",
-              "contentType": "application/x-apple-diskimage"
+              "size": 114018136,
+              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-apple-darwin.dmg",
+              "contentType": "application/x-diskcopy"
             },
             {
               "name": "servo-aarch64-apple-darwin.dmg.sha256",
+              "size": 107,
+              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-apple-darwin.dmg.sha256",
+              "contentType": "application/octet-stream"
+            },
+            {
+              "name": "servo-aarch64-linux-gnu.tar.gz",
+              "size": 48111347,
+              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-linux-gnu.tar.gz",
+              "contentType": "application/x-tar"
+            },
+            {
+              "name": "servo-aarch64-linux-gnu.tar.gz.sha256",
               "size": 96,
-              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-aarch64-apple-darwin.dmg.sha256",
+              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-linux-gnu.tar.gz.sha256",
               "contentType": "application/octet-stream"
             },
             {
               "name": "servo-aarch64-linux-ohos.hap.sha256",
               "size": 94,
-              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-aarch64-linux-ohos.hap.sha256",
+              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-linux-ohos.hap.sha256",
               "contentType": "application/octet-stream"
             },
             {
               "name": "servo-aarch64-linux-ohos.so",
-              "size": 117160744,
-              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-aarch64-linux-ohos.so",
+              "size": 123348600,
+              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-linux-ohos.so",
               "contentType": "application/octet-stream"
             },
             {
               "name": "servo-aarch64-linux-ohos.so.sha256",
               "size": 93,
-              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-aarch64-linux-ohos.so.sha256",
+              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-aarch64-linux-ohos.so.sha256",
               "contentType": "application/octet-stream"
             },
             {
-              "name": "servo-v0.1.3-src-vendored.tar.gz",
-              "size": 378043259,
-              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-v0.1.3-src-vendored.tar.gz",
+              "name": "servo-v0.6.0-src-vendored.tar.gz",
+              "size": 385871348,
+              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-v0.6.0-src-vendored.tar.gz",
               "contentType": "application/x-gtar"
             },
             {
               "name": "servo-x86_64-apple-darwin.dmg",
-              "size": 114929932,
-              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-x86_64-apple-darwin.dmg",
-              "contentType": "application/x-apple-diskimage"
+              "size": 117491671,
+              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-x86_64-apple-darwin.dmg",
+              "contentType": "application/x-diskcopy"
             },
             {
               "name": "servo-x86_64-apple-darwin.dmg.sha256",
-              "size": 95,
-              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-x86_64-apple-darwin.dmg.sha256",
+              "size": 96,
+              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-x86_64-apple-darwin.dmg.sha256",
               "contentType": "application/octet-stream"
             },
             {
               "name": "servo-x86_64-linux-gnu.tar.gz",
-              "size": 48459069,
-              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-x86_64-linux-gnu.tar.gz",
+              "size": 49202383,
+              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-x86_64-linux-gnu.tar.gz",
               "contentType": "application/x-tar"
             },
             {
               "name": "servo-x86_64-linux-gnu.tar.gz.sha256",
               "size": 95,
-              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-x86_64-linux-gnu.tar.gz.sha256",
+              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-x86_64-linux-gnu.tar.gz.sha256",
               "contentType": "application/octet-stream"
             },
             {
               "name": "servo-x86_64-windows-msvc.exe",
-              "size": 143159071,
-              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-x86_64-windows-msvc.exe",
+              "size": 114281043,
+              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-x86_64-windows-msvc.exe",
               "contentType": "application/x-msdos-program"
             },
             {
               "name": "servo-x86_64-windows-msvc.exe.sha256",
               "size": 95,
-              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-x86_64-windows-msvc.exe.sha256",
+              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-x86_64-windows-msvc.exe.sha256",
               "contentType": "application/octet-stream"
             },
             {
               "name": "servo-x86_64-windows-msvc.zip",
-              "size": 102442598,
-              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-x86_64-windows-msvc.zip",
+              "size": 103186894,
+              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-x86_64-windows-msvc.zip",
               "contentType": "application/zip"
             },
             {
               "name": "servo-x86_64-windows-msvc.zip.sha256",
               "size": 95,
-              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.1.3/servo-x86_64-windows-msvc.zip.sha256",
+              "downloadUrl": "https://github.com/servo/servo/releases/download/v0.6.0/servo-x86_64-windows-msvc.zip.sha256",
               "contentType": "application/octet-stream"
             }
           ],
@@ -7687,7 +7711,7 @@
           "repoUrl": "https://github.com/hackeris/Harmonix",
           "releaseUrl": "https://github.com/hackeris/Harmonix/releases",
           "iconUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAADAFBMVEX+/v4AAAAkJCQYGBjX19fFxcXo6Oi5ubmqqqlISEdWVlZ2dnY2NjZlZWWHh4eXl5f8uEYIZacHWpT/xU38y3X85bgHV442KBICGSobFAkgHyBuXkDnq0eprLFvcG+bn6X98t7+9eT7vFHg4N8GQGkwLy++jjrlxo+UcCv8yGgGSXf9szUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABtE+HGAAACD0lEQVR42u1W15bcIAwdQGC6J1uym7qpm7L//39LGeOh2GOch7zM9ZN10EUSV4LD4YorrrjifwHYv3gzhQnBts1scBtq3pJpFCBa/gQtgcC0SLqfYFI1gUbL0HEJVQjJgwmclT9Fa4C0hQAZLLQk4KsEg19iBZ4t4w4CB5Msch/BvIqwXQQCyYGOuhXCJgJ6chPexncQGBQDZ6ROYhMBkbOgyiS2EEAKm9da8CZ9gYAjyGQnSgIAs0qgUGoqVIXgCbBloPAygUwdwEilJj41mVomwDgt/1mpyRMYxixZS2FuYpEL7ERAlXd/vHnrvh9NJSbYaLetdn584/G3bucDzOMQ6pbCFwaKm3gEET1mOehtE8WPNJvIYJqA0uRKAOkGbsDkF4HN9+xsTqWnbqZwaMxtljYb/U/Ep/OA4rZDXdniiM4q9PWDrzidpE5jPy3cOzCkWCmEEO/vvt0+IzSHpkIGn5v+Y62gPy/H4/H2AYkkMu1LiNs3nK0J7u+c/8d3Z0anaKOWbkiaIVb5y6/fDw1ddeCpiIv3EoRzwWqg3CzerWsIIjUxaRA7cpCZKHT7cl57kjiP9/kv6Xql2OIuNb1lxMWO0FlGX0JTvkV6crBVxKo15Jahq2MbqphWH3YkiD8zFcPscglEXVa0uQi8Ea/oKYJqvKhMfiVcbqShcTCm5xBoIy3RocOq+YbzY3gFfyIRqiSsGTIAAAAASUVORK5CYII=",
-          "updatedAt": "2025-08-30",
+          "updatedAt": "2026-08-30",
           "status": "ok",
           "release": {
             "tag": "v0.0.11",
