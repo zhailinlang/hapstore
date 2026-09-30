@@ -1,20 +1,120 @@
 # HapStore
 
-鸿蒙（HarmonyOS）未上架 HAP 的聚合目录 App，基于 Zitann/HarmonyOS-Haps 的整理，把截止目前（2026-9-30）散落在 87 个 GitHub 仓库 Release 里的
-第三方 HAP 聚成一份可浏览、可搜索、可对比版本的快照，装在手机上就能看。
-另外本应用已内置公开镜像代理服务，以缓解部分场景下国内下载慢或者无法连接问题。
+鸿蒙（HarmonyOS）未上架 HAP 的聚合目录 App。
 
-**本仓库不托管、不修改、不重签名任何 HAP 文件。**
+鸿蒙生态里有大批优秀的第三方应用没有上架应用市场，只散落在各自 GitHub 仓库的 Release 里 ——
+要装得先知道它存在、再翻到 Release 页、再在几十个资产里找到对的那一个 `.hap`。
+HapStore 把这件事收拢成一份目录：目前收录 **87 个**应用，其中 **68 个**当前有可下载的 HAP。
+装完打开就能浏览、搜索、下载，不联网也能用。
+
+**本仓库不托管、不修改、不重签名任何 HAP 文件。** 所有下载直链都指向各上游项目的官方 Release。
 
 ---
 
-## 为什么是「目录」而不是「应用商店」
+## 功能亮点
 
-鸿蒙不允许第三方应用静默安装（`INSTALL_BUNDLE` 是 `system_basic` 权限，普通应用拿不到），
-所以这个 App 的定位是**发现 → 下载 → 交给系统安装器**，不是应用商店的替代品。
-你点安装后会跳到系统的安装确认页，需要手动确认一次。
+**📦 开箱即用，离线能逛**
+包里内置了一份完整快照（529KB），首次打开就有全部 87 个应用 —— 图标、描述、版本号、更新时间全在本地，
+断网也能翻。联网后点「检查更新」拉最新，没变化时服务端回 304，不会重复下载。
 
-未上架 ≠ 装不了，只是多一步手动确认。
+**🔍 四维筛选 + 全字段搜索**
+- 分类切换：一次开发多端部署 43 / 鸿蒙手机平板 38 / 鸿蒙电脑 6
+- 功能类型 10 种：影音播放、网络代理、社区社交、阅读漫画、游戏启动、开发工具、效率工具、浏览器、系统工具、其他
+- 可运行设备：手机 / 平板 / 电脑（多选，命中任一）
+- 属性标签：多端适配 / 第三方客户端 / 自托管 / Flutter（多选）
+- 搜索覆盖名称、描述、仓库名、分类、标签、设备类型，输入即筛
+- 筛选按钮上带生效条件数量角标，底部实时显示「查看 N 个应用」
+
+**⬇️ 下载不脏目录**
+先下到沙箱的 `.part` 临时文件 → 校验大小 → 才改名写进你选的目录。中途取消不会在目标位置留下残缺文件。
+按应用名自动建子文件夹防撞名，文件名自动补版本号（`entry-default.hap` → `entry-default-1.2.5.hap`），
+重名自动加后缀，覆盖前弹确认。
+
+**🚦 完整的下载管理**
+暂停 / 继续 / 取消 / 重试 / 另存为 / 删本地副本 / 复制链接，全都有。
+每条记录显示状态、百分比、进度条、体积、走的是直连还是镜像；失败时给出错误说明和实际使用的 URL。
+100 条记录跨会话保留，App 重启后还在。
+
+**🌐 链路可换可测**
+国内直连 GitHub 慢的话，内置 ghfast.top、ghproxy.net 等镜像。
+设置页一键测速，用真实的 HAP 直链探测，列出每条链路的毫秒数，点一下就切换。
+下载失败还会自动换另一条链路再试一次。默认直连，镜像开关在你手上。
+
+**🔄 版本变化一目了然**
+「更新」Tab 直接告诉你：新增了哪几个应用、哪几个从 `1.2.4` 升到了 `1.2.5`、你下载过的应用有没有出新版本。
+另有最近更新时间线（20 条）。确认后点「应用更新」才写进本地，不会偷偷改你的数据。
+
+**🧭 安装引导手把手**
+鸿蒙不允许第三方应用静默安装，最后一步必须你在系统安装器上确认一次。
+所以下载完会弹出三步图文引导（开发者模式 → 本地安装 → 选文件），
+另附 hdc 命令和无线调试两条备选路径，并提醒侧载签名的有效期。
+
+**🎨 跟随系统深浅色，两种列表密度**
+浅色 / 深色 / 跟随系统，即时生效；列表可选舒适或紧凑。
+
+**🔒 干净**
+只申请 `INTERNET` 和 `GET_NETWORK_INFO` 两个权限，无埋点、无账号、无第三方 SDK，
+设置和下载记录全存 App 私有目录，不上传任何数据。
+
+---
+
+## 界面
+
+| 应用列表 | 详情与下载 |
+|---|---|
+| ![应用列表](docs/screenshots/apps.jpeg) | ![详情与下载](docs/screenshots/detail.jpeg) |
+
+| 下载管理 | 设置 |
+|---|---|
+| ![下载管理](docs/screenshots/downloads.jpeg) | ![设置](docs/screenshots/settings.jpeg) |
+
+---
+
+## 下载安装
+
+最新 HAP 在 [Releases](https://github.com/zhailinlang/hapstore/releases/latest) 里，每个版本两个文件：
+
+| 文件 | 用途 |
+|---|---|
+| `HapStore-vX.Y.Z-signed.hap` | 签名版，**绝大多数人下这个**，可直接安装 |
+| `HapStore-vX.Y.Z-unsigned.hap` | 未签名版，供你用自己的证书重签后安装 |
+
+```bash
+hdc install HapStore-v1.0.0-signed.hap
+```
+
+未签名版**装不上真机** —— 鸿蒙要求 HAP 必须签名，它只在你不想用本项目证书时才有意义。
+
+装完打开就能用，无需联网、无需注册。新数据靠「更新」Tab 里的「检查更新」手动拉取
+（也可以在设置里打开启动自动检查）。
+
+---
+
+## 常见问题
+
+**为什么不能像应用商店那样点一下就装完？**
+鸿蒙不允许第三方应用静默安装 —— 安装权限是系统级的，普通应用拿不到。
+所以这个 App 的定位是「发现 → 下载 → 交给系统安装器」：你点安装后跳到系统确认页，手动确认一次即可。
+未上架 ≠ 装不了，只是多一步。
+
+**为什么有些应用显示「暂无 Release」或「Release 中无 HAP」？**
+收录 87 个应用里当前有 68 个能下载。其余是上游仓库还没发 Release，或 Release 里没附 `.hap` 包。
+这类会在列表卡片上标出状态，不会让你白点。
+
+**数据多久更新一次？我要手动更新吗？**
+快照每天自动更新两次（GitHub Actions，北京时间 12:23 / 00:23）。
+App 不会自动拉，需要你在「更新」Tab 点「检查更新」—— 也可以在设置里打开启动时自动检查，或选 6/12/24/72 小时的检查间隔。
+
+**下载慢怎么办？**
+设置页有镜像测速：点一下测速按钮，看哪条链路毫秒数最低就选哪条。
+建议先试 ghfast.top。下载失败时 App 会自动换直连再试一次。
+
+**侧载的应用能用多久？**
+取决于签名有效期：未实名开发者约 14 天，实名约 180 天，到期需要重新安装。这是鸿蒙的规则，与本 App 无关。
+
+**它会收集我的数据吗？**
+不会。只申请网络和获取网络状态两个权限，无埋点、无账号、无第三方 SDK，
+所有数据存在 App 私有目录里。
 
 ---
 
@@ -29,148 +129,10 @@
 
 ---
 
-## 数据流
-
-```
-apps.yaml（上游清单）
-    │
-    ▼
-sync/sync.py          GitHub API + ETag 增量 + 图标转 base64 内嵌
-    │                 （纯 IO 活，零算力，Actions 里 3-5 分钟跑完）
-    ▼
-data/apps.json        528KB，schemaVersion 2
-    │
-    ├──▶ ① Release 滚动资产 snapshot-latest   ← 主地址，可被 ghfast.top 等镜像代理
-    └──▶ ② snapshot-data 分支的 raw 地址      ← 兜底地址
-              │
-              ▼
-         App 先拉 700B 的 data/manifest.json，比对 sha256 再决定要不要拉 528KB
-```
-
-三条地址（可直接 curl 验证）：
-
-```bash
-# 主地址：快照
-curl -sI -L https://github.com/zhailinlang/hapstore/releases/download/snapshot-latest/apps.json
-
-# 主地址：指针文件（含快照 sha256 与 App 最新版本）
-curl -s https://github.com/zhailinlang/hapstore/releases/download/snapshot-latest/manifest.json
-
-# 兜底地址
-curl -s https://raw.githubusercontent.com/zhailinlang/hapstore/snapshot-data/apps.json
-```
-
----
-
-## 仓库结构
-
-| 目录 | 内容 |
-|---|---|
-| `app/` | ArkTS 应用（DevEco Studio，API 12+ / API 26 实测） |
-| `sync/` | 快照生成器（Python 3.12，只要 PyYAML + Pillow） |
-| `data/` | `manifest.json` 入库；`apps.json` 被 gitignore，只作 Release 资产 |
-| `scripts/` | 本地发版脚本（签名只在本机做，不进仓库） |
-| `.github/` | 定时快照工作流 |
-
----
-
-## 下载安装
-
-最新 HAP 在 [Releases](https://github.com/zhailinlang/hapstore/releases/latest) 里。
-每个版本提供两个文件：
-
-| 文件 | 用途 |
-|---|---|
-| `HapStore-v1.0.0-signed.hap` | 签名版，**绝大多数人下这个**，可直接安装 |
-| `HapStore-v1.0.0-unsigned.hap` | 未签名版，供你用自己的证书重签后安装 |
-
-```bash
-hdc install HapStore-v1.0.0-signed.hap
-```
-
-未签名版**装不上真机**——鸿蒙要求 HAP 必须签名，它只在你不想用本项目证书时才有意义。
-
-首次打开**离线可用**（包里内置了一份快照），联网后点「检查更新」拉最新。
-启动默认不自动检查，可在设置里打开。
-
----
-
-## 本地构建
-
-前置：DevEco Studio、Python 3.12、`gh`。
-
-```bash
-# 1) 生成签名配置（签名材料只在本机 ~/.hapstore-signing.env，权限 600）
-./scripts/setup-signing.sh
-
-# 2) 自查仓库干净（签名配置、口令、证书都没被跟踪）
-./scripts/check-clean.sh
-
-# 3) 日常开发
-./scripts/build.sh
-
-# 4) 发版
-./scripts/bump.sh patch              # 或 ./scripts/bump.sh 1.2.0
-./scripts/sync-rawfile.sh            # 把最新快照拷进包内
-./scripts/build.sh
-./scripts/release.sh --push          # 归档 + 刷 manifest + 打 tag + 建 Release
-```
-
-签名安全：`app/build-profile.json5` 与 `*.p12` / `*.cer` 全部 gitignore，
-`.githooks/pre-commit` 二次拦截。仓库里只有 `app/build-profile.example.json5` 占位模板。
-
-`versionCode` 规则 `major×10⁶ + minor×10³ + patch`，**必须单调递增** ——
-App 自更新就是靠比这个数字判断有没有新版本的，`bump.sh` 会拒绝回退。
-
----
-
-## 快照自动化
-
-`.github/workflows/snapshot.yml` 每天 UTC 04:23 / 16:23（北京 12:23 / 00:23）跑一次，
-刻意避开整点（整点排队严重，实测可能延迟 20-30 分钟）。
-
-```bash
-gh workflow run snapshot.yml            # 手动触发
-gh workflow run snapshot.yml -f force=true   # 忽略 ETag 全量重抓
-gh run list --workflow=snapshot.yml
-```
-
-设计要点：
-
-- **故意不配 `on: push`** —— 工作流自己会提交 manifest，配了会递归触发。
-- 增量状态 `state.json` 走 `actions/cache`，key 必须带 `run_id`：
-  静态 key 会让 cache 永不更新、ETag 不再变化、快照从此不再更新。
-- `snapshot-latest` 标 prerelease，不抢 `/releases/latest`。
-- `snapshot-data` 分支每轮单提交强推，历史永远 1 个 commit，不撑大仓库。
-- 图标目录 `sync/icons/*.png` 已入库，命中本地缓存，每轮省 87 次 API。
-
-**60 天停用风险**：GitHub 会在仓库 60 天无活动后停用 schedule。每天提交 manifest 本身
-是活动，但别把宝押在上面 —— 家里机器上挂个每周 cron 更稳：
-
-```bash
-0 9 * * 1 cd <仓库路径> && ./scripts/keepalive.sh >> /tmp/hapstore-keepalive.log 2>&1
-```
-
-需要 PAT 带 `workflow` scope。
-
----
-
-## 排错速查
-
-| 现象 | 原因 / 处理 |
-|---|---|
-| 检查更新 404 | Release 还没生成，看 Actions 首轮跑完没有；或 `snapshot-latest` tag 被删了 |
-| 「快照格式版本不支持」 | 远端的 `schemaVersion` 超过 App 内的 `SUPPORTED_SCHEMA_VERSION`，升级 App |
-| 主地址通但一直 304 | `sync/state.json` 缓存问题，用 `-f force=true` 重跑 |
-| 国内下载慢 | 设置里开 `ghfast.top` 镜像（Release 资产可代理，`github.io` 不可） |
-| Actions 显示绿但兜底坏了 | 强推 `snapshot-data` 那步是 `continue-on-error`，单独 curl 兜底地址验证 |
-| 重装后数据源显示「未配置」 | 旧版本存的空 `sourceUrl` 压住默认值，已在 `read()` 里迁移；仍不行就点「恢复默认地址」 |
-| 构建报 symbol table 路径错 | hvigor 缓存残留旧绝对路径，`rm -rf app/entry/build app/.hvigor` 后重建 |
-
----
-
 ## 许可
 
 MIT，见 [LICENSE](LICENSE)。
 
 数据来源 [Zitann/HarmonyOS-Haps](https://github.com/Zitann/HarmonyOS-Haps) 遵循其自身许可。
+
+构建、发版与快照自动化的维护笔记见 [DEVELOP.md](DEVELOP.md)。
