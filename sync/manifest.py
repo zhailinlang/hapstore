@@ -38,6 +38,19 @@ def now_iso() -> str:
     return datetime.now(CST).isoformat(timespec='seconds')
 
 
+def asset_url(repo: str, ver: str, signed: bool = True) -> str:
+    """Release 资产地址。签名版供 App 自更新与终端用户直装；未签名版供自行重签。"""
+    suffix = 'signed' if signed else 'unsigned'
+    return f'https://github.com/{repo}/releases/download/v{ver}/HapStore-v{ver}-{suffix}.hap'
+
+
+def asset_paths(ver: str) -> tuple:
+    """默认产物路径（out/ 下）：(签名版, 未签名版)。"""
+    base = os.path.join(ROOT, 'out')
+    return (os.path.join(base, f'HapStore-v{ver}-signed.hap'),
+            os.path.join(base, f'HapStore-v{ver}-unsigned.hap'))
+
+
 def sha256_of(path: str) -> str:
     h = hashlib.sha256()
     with open(path, 'rb') as f:
@@ -86,7 +99,8 @@ def main() -> int:
     ap.add_argument('--apps', default=APPS_PATH, help='快照路径')
     ap.add_argument('--out', default=MANIFEST_PATH, help='manifest 输出路径')
     ap.add_argument('--set-app-version', default='', help='把 app 段刷新到这个版本')
-    ap.add_argument('--asset', default='', help='本次发版的 HAP 文件路径，用于算 size/sha256')
+    ap.add_argument('--asset', default='', help='本次发版的签名 HAP 路径，用于算 size/sha256')
+    ap.add_argument('--asset-unsigned', default='', help='未签名 HAP 路径（可选，用于记录 unsignedUrl）')
     ap.add_argument('--notes', default='', help='发版说明')
     args = ap.parse_args()
 
@@ -124,24 +138,32 @@ def main() -> int:
     # ---- app 段 ----
     if args.set_app_version:
         ver = args.set_app_version
-        asset = args.asset
-        if not asset:
-            asset = os.path.join(ROOT, 'out', f'HapStore-v{ver}.hap')
+        default_signed, default_unsigned = asset_paths(ver)
+        asset = args.asset or default_signed
+        uasset = args.asset_unsigned or default_unsigned
         size = os.path.getsize(asset) if os.path.exists(asset) else 0
         sha = sha256_of(asset) if os.path.exists(asset) else ''
         if not os.path.exists(asset):
-            print(f'警告：找不到 HAP {asset}，size/sha256 记为 0/空', file=sys.stderr)
+            print(f'警告：找不到签名 HAP {asset}，size/sha256 记为 0/空', file=sys.stderr)
+        usize = os.path.getsize(uasset) if os.path.exists(uasset) else 0
+        usha = sha256_of(uasset) if os.path.exists(uasset) else ''
+        if not os.path.exists(uasset):
+            print(f'提示：找不到未签名 HAP {uasset}，manifest 里不记录 unsignedUrl', file=sys.stderr)
         app = {
             'versionCode': old_app.get('versionCode', DEFAULT_MIN_APP_VERSION_CODE),
             'versionName': ver,
             'tag': f'v{ver}',
-            'downloadUrl': f'https://github.com/{repo}/releases/download/v{ver}/HapStore-v{ver}.hap',
+            'downloadUrl': asset_url(repo, ver, signed=True),
             'size': size,
             'sha256': sha,
             'publishedAt': now_iso(),
             'releaseUrl': f'https://github.com/{repo}/releases/latest',
             'notes': args.notes,
         }
+        if usize:
+            app['unsignedUrl'] = asset_url(repo, ver, signed=False)
+            app['unsignedSize'] = usize
+            app['unsignedSha256'] = usha
         # versionCode 优先跟 app.json5 保持一致
         code, name = read_app_version()
         if name == ver:
@@ -166,9 +188,9 @@ def main() -> int:
         # 指向不存在资产的 URL，让 App 以为有新版可下、一点就 404
         if app.get('downloadUrl') and app.get('versionName'):
             ver = app['versionName']
-            app['downloadUrl'] = (
-                f'https://github.com/{repo}/releases/download/v{ver}/HapStore-v{ver}.hap'
-            )
+            app['downloadUrl'] = asset_url(repo, ver, signed=True)
+            if app.get('unsignedUrl'):
+                app['unsignedUrl'] = asset_url(repo, ver, signed=False)
 
     out = {
         'schemaVersion': MANIFEST_SCHEMA,
@@ -185,7 +207,8 @@ def main() -> int:
 
     print(f'已写入 {args.out}')
     print(f'  snapshot: {snap["size"]} 字节  schema={snap["schemaVersion"]}  {snap["generatedAt"]}')
-    print(f'  app: v{app["versionName"]} ({app["versionCode"]})  {app["size"]} 字节')
+    u = f'，未签名 {app["unsignedSize"]} 字节' if app.get('unsignedSize') else ''
+    print(f'  app: v{app["versionName"]} ({app["versionCode"]})  签名 {app["size"]} 字节{u}')
     return 0
 
 

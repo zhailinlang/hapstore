@@ -51,18 +51,39 @@ fi
 # 2) 构建
 "$ROOT/scripts/build.sh"
 
-# 3) 产物归档到 out/
+# 3) 产物归档到 out/：签名版（可直接装）+ 未签名版（供自行重签）
 mkdir -p "$OUT_DIR"
 HAP_SRC="$(find "$ROOT/app/entry/build" -name 'entry-default-signed.hap' | head -1)"
-HAP_OUT="$OUT_DIR/HapStore-$TAG.hap"
+UNSIGNED_SRC="$(find "$ROOT/app/entry/build" -name 'entry-default-unsigned.hap' | head -1)"
+[[ -z "$HAP_SRC" ]] && { echo "未找到签名产物 entry-default-signed.hap" >&2; exit 1; }
+
+HAP_OUT="$OUT_DIR/HapStore-$TAG-signed.hap"
 cp "$HAP_SRC" "$HAP_OUT"
-echo "产物已归档：$HAP_OUT"
+echo "签名版已归档：$HAP_OUT"
 echo "  sha256: $(shasum -a 256 "$HAP_OUT" | cut -d' ' -f1)"
 
-# 4) 刷新 manifest 的 app 段
+UPLOADS=("$HAP_OUT")
+UNSIGNED_OUT=""
+if [[ -n "$UNSIGNED_SRC" ]]; then
+  UNSIGNED_OUT="$OUT_DIR/HapStore-$TAG-unsigned.hap"
+  cp "$UNSIGNED_SRC" "$UNSIGNED_OUT"
+  echo "未签名版已归档：$UNSIGNED_OUT"
+  echo "  sha256: $(shasum -a 256 "$UNSIGNED_OUT" | cut -d' ' -f1)"
+  UPLOADS+=("$UNSIGNED_OUT")
+else
+  echo "提示：没有未签名产物，本次只发签名版"
+fi
+
+# 4) 刷新 manifest 的 app 段（App 自更新只认签名版；未签名版另记一个 unsignedUrl）
+# 注意：zsh 不会自动拆分不带引号的参数展开，可选参数必须拼成数组再展开，
+# 否则 "--asset-unsigned /path" 会被当成一个 argv 元素传进去。
 : "${PYTHON:=python3}"
-"$PYTHON" "$ROOT/sync/manifest.py" --set-app-version "$VERSION" --asset "$HAP_OUT" \
-  ${NOTES:+--notes "$NOTES"}
+MANIFEST_ARGS=(--set-app-version "$VERSION" --asset "$HAP_OUT")
+if [[ -n "$UNSIGNED_OUT" ]]; then
+  MANIFEST_ARGS+=(--asset-unsigned "$UNSIGNED_OUT")
+fi
+MANIFEST_ARGS+=(--notes "${NOTES:-HapStore $TAG}")
+"$PYTHON" "$ROOT/sync/manifest.py" "${MANIFEST_ARGS[@]}"
 
 # 5) 提交并打 tag
 cd "$ROOT"
@@ -79,13 +100,24 @@ else
   echo "已打 tag：$TAG"
 fi
 
+# Release 页面正文。没传 --notes 就用默认文案，把两个资产的区别讲清楚。
+if [[ -z "$NOTES" ]]; then
+  NOTES="HapStore $TAG
+
+**HapStore-$TAG-signed.hap** —— 签名版，可直接安装：
+\`hdc install HapStore-$TAG-signed.hap\`
+
+**HapStore-$TAG-unsigned.hap** —— 未签名版，供你用自己的证书重签。
+鸿蒙要求 HAP 必须签名才能安装，未签名版直接装会失败，仅在你不想用本项目证书时使用。"
+fi
+
 if [[ $DO_PUSH -eq 0 ]]; then
   cat <<TIP
 
 本机准备完毕。确认无误后执行：
 
   git push origin HEAD && git push origin $TAG
-  gh release create $TAG "$HAP_OUT" --title "HapStore $TAG" --notes "${NOTES:-HapStore $TAG}"
+  gh release create $TAG "${UPLOADS[@]}" --title "HapStore $TAG" --notes "$NOTES"
   gh release upload snapshot-latest "$ROOT/data/apps.json" --clobber   # 可选：顺手刷新快照资产
 
 或者直接跑：./scripts/release.sh --push
@@ -108,5 +140,9 @@ if [[ -f "$ROOT/data/apps.json" ]]; then
   gh release upload snapshot-latest "$ROOT/data/apps.json" "$ROOT/data/manifest.json" --clobber
 fi
 
-gh release create "$TAG" "$HAP_OUT" --title "HapStore $TAG" --notes "${NOTES:-HapStore $TAG}"
+gh release create "$TAG" "${UPLOADS[@]}" --title "HapStore $TAG" --notes "$NOTES"
+REPO_SLUG="$(git remote get-url origin 2>/dev/null | sed -E 's#.*github\.com[:/]([^/]+/[^/]+?)(\.git)?$#\1#')"
 echo "发布完成：$TAG"
+if [[ -n "$REPO_SLUG" ]]; then
+  echo "  https://github.com/$REPO_SLUG/releases/tag/$TAG"
+fi

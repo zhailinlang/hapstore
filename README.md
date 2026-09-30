@@ -75,12 +75,19 @@ curl -s https://raw.githubusercontent.com/zhailinlang/hapstore/snapshot-data/app
 
 ## 下载安装
 
-最新 HAP 在 [Releases](https://github.com/zhailinlang/hapstore/releases/latest) 里，
-下载 `.hap` 后用 `hdc install` 或系统安装器安装：
+最新 HAP 在 [Releases](https://github.com/zhailinlang/hapstore/releases/latest) 里。
+每个版本提供两个文件：
+
+| 文件 | 用途 |
+|---|---|
+| `HapStore-v1.0.0-signed.hap` | 签名版，**绝大多数人下这个**，可直接安装 |
+| `HapStore-v1.0.0-unsigned.hap` | 未签名版，供你用自己的证书重签后安装 |
 
 ```bash
-hdc install HapStore-v1.0.0.hap
+hdc install HapStore-v1.0.0-signed.hap
 ```
+
+未签名版**装不上真机**——鸿蒙要求 HAP 必须签名，它只在你不想用本项目证书时才有意义。
 
 首次打开**离线可用**（包里内置了一份快照），联网后点「检查更新」拉最新。
 启动默认不自动检查，可在设置里打开。
