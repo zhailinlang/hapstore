@@ -141,7 +141,8 @@ if [[ -f "$ROOT/data/apps.json" ]]; then
 fi
 
 gh release create "$TAG" "${UPLOADS[@]}" --title "HapStore $TAG" --notes "$NOTES"
-REPO_SLUG="$(git remote get-url origin 2>/dev/null | sed -E 's#.*github\.com[:/]([^/]+/[^/]+?)(\.git)?$#\1#')"
+# 注意用两档替换：BSD sed（macOS）不支持 +? 这类懒惰量词
+REPO_SLUG="$(git remote get-url origin 2>/dev/null | sed -E 's#^.*github\.com[:/]##; s#\.git$##')"
 echo "发布完成：$TAG"
 if [[ -n "$REPO_SLUG" ]]; then
   echo "  https://github.com/$REPO_SLUG/releases/tag/$TAG"
