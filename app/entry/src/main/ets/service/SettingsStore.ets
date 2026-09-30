@@ -132,6 +132,14 @@ export class SettingsStore {
       this.data.appendVersionToName = patch.appendVersionToName;
       AppStorage.setOrCreate<boolean>('appendVersionToName', this.data.appendVersionToName);
     }
+    if (patch.snapshotEtag !== undefined) {
+      this.data.snapshotEtag = patch.snapshotEtag;
+      AppStorage.setOrCreate<string>('snapshotEtag', this.data.snapshotEtag);
+    }
+    if (patch.manifestEtag !== undefined) {
+      this.data.manifestEtag = patch.manifestEtag;
+      AppStorage.setOrCreate<string>('manifestEtag', this.data.manifestEtag);
+    }
     this.persist();
   }
 
@@ -184,6 +192,8 @@ export class SettingsStore {
     AppStorage.setOrCreate<string>('downloadRootUri', this.data.downloadRootUri);
     AppStorage.setOrCreate<string>('downloadRootName', this.data.downloadRootName);
     AppStorage.setOrCreate<boolean>('appendVersionToName', this.data.appendVersionToName);
+    AppStorage.setOrCreate<string>('snapshotEtag', this.data.snapshotEtag);
+    AppStorage.setOrCreate<string>('manifestEtag', this.data.manifestEtag);
   }
 
   private path(): string {
@@ -206,7 +216,10 @@ export class SettingsStore {
       const base: SettingsData = DEFAULT_SETTINGS();
       // 逐字段兜底，老版本文件缺字段时不至于崩
       base.schemaVersion = parsed.schemaVersion ?? base.schemaVersion;
-      base.sourceUrl = parsed.sourceUrl ?? '';
+      // 老版本存的是空串（那时还没有官方数据源）；空串一律迁到默认地址，
+      // 想纯离线的话关掉「启动时自动检查」即可，不影响手动检查
+      const migratedUrl: string = (parsed.sourceUrl ?? '').trim();
+      base.sourceUrl = migratedUrl.length > 0 ? migratedUrl : base.sourceUrl;
       base.autoCheckOnLaunch = parsed.autoCheckOnLaunch ?? false;
       base.checkIntervalHours = parsed.checkIntervalHours ?? 24;
       base.lastCheckAt = parsed.lastCheckAt ?? 0;
@@ -223,6 +236,8 @@ export class SettingsStore {
       base.downloadRootUri = parsed.downloadRootUri ?? '';
       base.downloadRootName = parsed.downloadRootName ?? '';
       base.appendVersionToName = parsed.appendVersionToName ?? true;
+      base.snapshotEtag = parsed.snapshotEtag ?? '';
+      base.manifestEtag = parsed.manifestEtag ?? '';
       // 文件里的 mirrorTemplate 一律不信：残缺模板（不含 {url}）会让镜像静默失效
       base.mirrorTemplate = SettingsStore.templateOf(base);
       this.data = base;

@@ -4,8 +4,9 @@ import { AppInfo, StoreData, appReleases, formatDate } from '../model/AppInfo';
 import { InstalledUpdate, StoreDiff, VersionChange } from '../model/UpdateInfo';
 import { DownloadRecord } from '../model/DownloadRecord';
 import { DownloadStore } from '../service/DownloadStore';
-import { RemoteStoreService } from '../service/RemoteStoreService';
+import { FetchedText, RemoteStoreService } from '../service/RemoteStoreService';
 import { SettingsStore } from '../service/SettingsStore';
+import { SUPPORTED_SCHEMA_VERSION } from '../common/constants/AppConstants';
 import { NetworkService } from '../service/NetworkService';
 import { StoreRepository } from '../service/StoreRepository';
 import { DownloadPanel } from './DownloadPanel';
@@ -120,10 +121,22 @@ export struct UpdatesTabView {
     try {
       const ctx: common.UIAbilityContext = this.ctx();
       const service: RemoteStoreService = new RemoteStoreService(ctx);
-      const text: string = await service.fetchText();
-      const remote: StoreData = new StoreRepository(ctx).parseText(text);
+      const got: FetchedText = await service.fetchText(SettingsStore.shared().get().snapshotEtag);
+      if (got.notModified) {
+        // 304：服务端说快照没变，不用解析也不用落盘
+        this.pendingText = '';
+        this.diff = null;
+        this.updateCount = 0;
+        SettingsStore.shared().apply({ lastCheckAt: Date.now() });
+        this.msg = '已是最新，快照没有变化';
+        return;
+      }
+      const remote: StoreData = new StoreRepository(ctx).parseText(got.text);
+      if ((remote.schemaVersion ?? 0) !== SUPPORTED_SCHEMA_VERSION) {
+        throw new Error(`快照格式为 v${remote.schemaVersion ?? 0}，当前 App 只支持 v${SUPPORTED_SCHEMA_VERSION}，请先更新 HapStore`);
+      }
       const local: StoreData = this.data ?? await service.loadLocal();
-      this.pendingText = text;
+      this.pendingText = got.text;
       const result: StoreDiff = diffStore(local, remote);
       this.diff = result;
       this.updateCount = result.changeCount;

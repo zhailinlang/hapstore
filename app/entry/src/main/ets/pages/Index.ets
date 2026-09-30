@@ -3,6 +3,7 @@ import { DownloadStore } from '../service/DownloadStore';
 import { RemoteStoreService } from '../service/RemoteStoreService';
 import { SettingsStore } from '../service/SettingsStore';
 import { NetworkService } from '../service/NetworkService';
+import { StoreDiff } from '../model/UpdateInfo';
 import { AppsTabView } from '../components/AppsTabView';
 import { UpdatesTabView } from '../components/UpdatesTabView';
 import { SettingsTabView } from '../components/SettingsTabView';
@@ -44,7 +45,12 @@ struct Index {
       return;
     }
     const ctx: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
-    new RemoteStoreService(ctx).check().then((diff) => {
+    new RemoteStoreService(ctx).check().then((diff: StoreDiff | null) => {
+      if (diff === null) {
+        // 304：快照没变，不写红点，但记一次检查时间
+        SettingsStore.shared().apply({ lastCheckAt: Date.now() });
+        return;
+      }
       AppStorage.setOrCreate('updateCount', diff.changeCount);
       SettingsStore.shared().apply({ lastCheckAt: Date.now() });
     }).catch(() => {

@@ -1,5 +1,5 @@
 import { common, ConfigurationConstant } from '@kit.AbilityKit';
-import { promptAction } from '@kit.ArkUI';
+import { promptAction, router } from '@kit.ArkUI';
 import {
   BUILTIN_MIRRORS,
   MIRROR_CUSTOM_ID,
@@ -7,12 +7,15 @@ import {
   templateProblem,
   uriDisplayName
 } from '../model/SettingsData';
+import { AppReleaseInfo, AppUpdateResult } from '../model/ManifestData';
 import { SpeedResult, MirrorService } from '../service/MirrorService';
 import { NetworkService } from '../service/NetworkService';
 import { SettingsStore } from '../service/SettingsStore';
 import { StoreRepository } from '../service/StoreRepository';
 import { DownloadStore } from '../service/DownloadStore';
 import { DownloadService } from '../service/DownloadService';
+import { AppUpdateService } from '../service/AppUpdateService';
+import { DEFAULT_SOURCE_URL } from '../common/constants/AppConstants';
 import { Theme } from '../common/constants/ThemeConstants';
 
 const SAMPLE_URL: string = 'https://github.com/owner/repo/releases/download/v1.0/app.hap';
@@ -105,12 +108,17 @@ export struct SettingsTabView {
   @State urlDraft: string = '';
   @State customDraft: string = '';
   @State probeDraft: string = '';
+  @State appChecking: boolean = false;
+  @State appUpdateMsg: string = '';
+  @State selfVersionText: string = '';
+  @State pendingRelease: AppReleaseInfo | null = null;
 
   aboutToAppear(): void {
     const s = SettingsStore.shared().get();
     this.urlDraft = s.sourceUrl;
     this.customDraft = s.customTemplate;
     this.probeDraft = s.probeUrl;
+    this.selfVersionText = AppUpdateService.selfVersionName();
     this.refreshCacheInfo();
   }
 
@@ -125,6 +133,65 @@ export struct SettingsTabView {
       return;
     }
     this.cacheInfo = `${sizeText(stat.size)} · 更新于 ${timeText(stat.mtime)}`;
+  }
+
+  /** 恢复默认快照地址（改动过地址后又想回到 Release 滚动资产时用）。 */
+  private restoreDefaultSource(): void {
+    this.urlDraft = DEFAULT_SOURCE_URL;
+    SettingsStore.shared().apply({ sourceUrl: DEFAULT_SOURCE_URL, snapshotEtag: '' });
+    promptAction.showToast({ message: '已恢复默认数据源地址' });
+  }
+
+  /** 检查 HapStore 自身有没有新版本。只读 manifest（700B），不做任何下载。 */
+  private async checkAppUpdate(): Promise<void> {
+    if (this.appChecking) {
+      return;
+    }
+    if (!NetworkService.isOnline()) {
+      promptAction.showToast({ message: '当前无网络' });
+      return;
+    }
+    this.appChecking = true;
+    this.appUpdateMsg = '正在检查…';
+    try {
+      const r: AppUpdateResult = await new AppUpdateService(this.ctx()).check();
+      this.selfVersionText = r.currentVersionName;
+      this.appUpdateMsg = r.message;
+      this.pendingRelease = r.hasUpdate ? r.latest : null;
+    } catch (e) {
+      this.appUpdateMsg = `检查失败：${(e as Error).message}`;
+    } finally {
+      this.appChecking = false;
+    }
+  }
+
+  /** 下载新版 HAP，完成后跳安装引导页（系统不允许第三方静默安装）。 */
+  private async downloadAppUpdate(): Promise<void> {
+    const rel: AppReleaseInfo | null = this.pendingRelease;
+    if (!rel) {
+      return;
+    }
+    if (!NetworkService.isOnline()) {
+      promptAction.showToast({ message: '当前无网络' });
+      return;
+    }
+    this.appChecking = true;
+    this.appUpdateMsg = '正在下载…';
+    try {
+      const uri: string = await new AppUpdateService(this.ctx()).downloadUpdate(rel, (t: string) => {
+        this.appUpdateMsg = t;
+      });
+      this.appUpdateMsg = `已下载：${uriDisplayName(uri)}`;
+      this.pendingRelease = null;
+      router.pushUrl({
+        url: 'pages/InstallGuidePage',
+        params: { fileName: uriDisplayName(uri), saveUri: uri }
+      });
+    } catch (e) {
+      this.appUpdateMsg = `下载失败：${(e as Error).message}`;
+    } finally {
+      this.appChecking = false;
+    }
   }
 
   private async runSpeedTest(): Promise<void> {
@@ -285,6 +352,21 @@ export struct SettingsTabView {
     }
     .width('100%')
     .padding({ top: 4, bottom: 4 })
+  }
+
+  @Builder
+  ActionButton(text: string, enabled: boolean, onTap: () => void) {
+    Text(text)
+      .fontSize(13)
+      .fontColor(enabled ? Theme.primary : Theme.textSub)
+      .padding({ left: 14, right: 14, top: 8, bottom: 8 })
+      .borderRadius(10)
+      .backgroundColor(Theme.chipBg)
+      .onClick(() => {
+        if (enabled) {
+          onTap();
+        }
+      })
   }
 
   @Builder
@@ -484,7 +566,17 @@ export struct SettingsTabView {
           .fontSize(12)
           .fontColor(Theme.textSub)
           .width('100%')
-        Text('检查动作在「更新」页执行')
+        Row({ space: 8 }) {
+          this.ActionButton('恢复默认地址', this.urlDraft !== DEFAULT_SOURCE_URL, () => {
+            this.restoreDefaultSource();
+          })
+          this.ActionButton('清空 ETag', true, () => {
+            SettingsStore.shared().apply({ snapshotEtag: '', manifestEtag: '' });
+            promptAction.showToast({ message: '已清空 ETag，下次检查将全量拉取' });
+          })
+        }
+        .width('100%')
+        Text('检查动作在「更新」页执行；快照没变时服务端返回 304，不再重复下载')
           .fontSize(11)
           .fontColor(Theme.textSub)
           .width('100%')
@@ -657,10 +749,27 @@ export struct SettingsTabView {
     Column({ space: 8 }) {
       this.GroupTitle('关于')
       Column({ space: 6 }) {
-        Text('HAP 目录 v1.0.0')
+        Text(`HapStore ${this.selfVersionText.length > 0 ? 'v' + this.selfVersionText : ''}`)
           .fontSize(14)
           .fontColor(Theme.textMain)
           .width('100%')
+        Row({ space: 8 }) {
+          this.ActionButton(this.appChecking ? '处理中…' : '检查 App 更新', !this.appChecking, () => {
+            this.checkAppUpdate();
+          })
+          if (this.pendingRelease !== null) {
+            this.ActionButton('下载新版', !this.appChecking, () => {
+              this.downloadAppUpdate();
+            })
+          }
+        }
+        .width('100%')
+        if (this.appUpdateMsg.length > 0) {
+          Text(this.appUpdateMsg)
+            .fontSize(12)
+            .fontColor(Theme.textSub)
+            .width('100%')
+        }
         Text('数据来源：github.com/Zitann/HarmonyOS-Haps（社区维护的未上架 HAP 聚合）')
           .fontSize(12)
           .fontColor(Theme.textSub)

@@ -1,5 +1,7 @@
 /** 设置项结构，持久化在 filesDir/settings.json。 */
 
+import { DEFAULT_SOURCE_URL } from '../common/constants/AppConstants';
+
 /** 一个镜像选项。template 里用 {url} 占位原始链接，直连为空串。 */
 export interface MirrorItem {
   id: string;
@@ -69,12 +71,17 @@ export interface SettingsData {
   downloadRootName: string;
   /** 文件名里没有版本号时，自动补上（entry-default-unsigned.hap → entry-default-unsigned-1.2.5.hap） */
   appendVersionToName: boolean;
+  /** 快照的条件请求标记：带上它，没变化时服务端回 304，不必重复下 528KB */
+  snapshotEtag: string;
+  /** manifest 的条件请求标记（同上，文件只有 700B） */
+  manifestEtag: string;
 }
 
 export function DEFAULT_SETTINGS(): SettingsData {
   return {
     schemaVersion: 1,
-    sourceUrl: '',
+    // 新装默认指向仓库里的滚动快照；老用户 settings.json 里已有的值不会被覆盖
+    sourceUrl: DEFAULT_SOURCE_URL,
     autoCheckOnLaunch: false,
     checkIntervalHours: 24,
     lastCheckAt: 0,
@@ -91,7 +98,9 @@ export function DEFAULT_SETTINGS(): SettingsData {
     meteredWarn: true,
     downloadRootUri: '',
     downloadRootName: '',
-    appendVersionToName: true
+    appendVersionToName: true,
+    snapshotEtag: '',
+    manifestEtag: ''
   };
 }
 
@@ -116,6 +125,8 @@ export interface SettingsPatch {
   downloadRootUri?: string;
   downloadRootName?: string;
   appendVersionToName?: boolean;
+  snapshotEtag?: string;
+  manifestEtag?: string;
 }
 
 /**
