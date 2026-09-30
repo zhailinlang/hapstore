@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-30T14:56:45+08:00",
+  "generatedAt": "2026-10-01T04:54:32+08:00",
   "repo": "zhailinlang/hapstore",
   "snapshot": {
     "url": "https://github.com/zhailinlang/hapstore/releases/download/snapshot-latest/apps.json",
     "altUrl": "https://raw.githubusercontent.com/zhailinlang/hapstore/snapshot-data/apps.json",
-    "size": 529277,
-    "sha256": "e35cc3d5ebbca79f9d4476dbd30cedf363358d827fab571acc6c43769a64ca2d",
+    "size": 530855,
+    "sha256": "1c32f1336c4ad1b3d778d669533a71dba5c0eb53bb9471766931ab1041261a66",
     "schemaVersion": 2,
-    "generatedAt": "2026-09-30T06:43:47+00:00",
+    "generatedAt": "2026-09-30T20:54:32+00:00",
     "minAppVersionCode": 1000000
   },
   "app": {
