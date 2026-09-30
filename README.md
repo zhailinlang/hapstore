@@ -10,6 +10,10 @@ HapStore 把这件事收拢成一份目录：目前收录 **87 个**应用，其
 
 **本仓库不托管、不修改、不重签名任何 HAP 文件。** 所有下载直链都指向各上游项目的官方 Release。
 
+> 🙏 **数据来自 [Zitann/HarmonyOS-Haps](https://github.com/Zitann/HarmonyOS-Haps)。**
+> 这份社区清单是这个 App 的地基 —— 87 个应用的仓库坐标、分类与简介全部来自它，由作者和社区长期逐条维护。
+> HapStore 只是把它做成了手机上能逛、能搜、能下载的样子，所有基础性工作的功劳归于上游。
+
 ---
 
 ## 功能亮点
@@ -117,6 +121,34 @@ App 不会自动拉，需要你在「更新」Tab 点「检查更新」—— �
 不会。只申请网络和获取网络状态两个权限，无埋点、无账号、无第三方 SDK，
 所有数据存在 App 私有目录里。
 
+**我想推荐一个应用 / 发现某个信息错了，该去哪儿提？**
+清单本身（应用名称、仓库坐标、分类、简介）归上游
+[Zitann/HarmonyOS-Haps](https://github.com/Zitann/HarmonyOS-Haps) 管 ——
+去那儿提 issue 或 PR 最直接，我们每天同步两次，第二天就会跟上。
+如果是 HAP 下载链接失效、打标分类不准这类「HapStore 这一层」的问题，欢迎在本仓库提 issue。
+
+---
+
+## 致谢
+
+**[Zitann/HarmonyOS-Haps](https://github.com/Zitann/HarmonyOS-Haps)** —— 本项目全部应用清单的来源，
+也是这个项目能够成立的前提。
+
+它没有做成一个 App，而是用一份朴素的 `apps.yaml` 把散落在 GitHub 各处的鸿蒙未上架 HAP 逐条整理出来，
+并长期维护至今。没有这份基础性工作，就不会有 HapStore。
+特此致谢，也请去给上游点个 ⭐ —— 它值得。
+
+HapStore 在其中承担的部分很有限，分工如下：
+
+| 环节 | 谁在做 |
+|---|---|
+| 应用清单（87 个仓库坐标、分类、简介） | **[Zitann/HarmonyOS-Haps](https://github.com/Zitann/HarmonyOS-Haps)** |
+| Release 里 `.hap` 直链的探测、图标抓取、功能/设备打标、快照分发 | HapStore（本仓库） |
+| HAP 文件本身 | 各应用原作者 —— 我们不托管、不修改、不重签名，直链一律指向其官方 Release |
+
+上游仓库目前未声明开源许可证，清单内容的许可与署名以其仓库说明为准。
+本仓库自身代码为 MIT，见 [LICENSE](LICENSE)。
+
 ---
 
 ## 免责声明
@@ -125,15 +157,15 @@ App 不会自动拉，需要你在「更新」Tab 点「检查更新」—— �
 - 本App使用 Workbuddy Vibe Coding而来，本人自测运行正常，当然也可能存在不少bug，如果有使用问题可以提issue。
 - 各应用的版权与责任归其原作者。发现侵权内容请提 issue，会尽快下架索引。
 - App 不收集、不上传任何用户数据，全部逻辑在本地完成。
-- 数据来源：[Zitann/HarmonyOS-Haps](https://github.com/Zitann/HarmonyOS-Haps)（社区维护的清单），
-  遵循其自身的许可。
+- 应用清单来源 [Zitann/HarmonyOS-Haps](https://github.com/Zitann/HarmonyOS-Haps)，致谢见上文。
 
 ---
 
 ## 许可
 
-MIT，见 [LICENSE](LICENSE)。
+代码 MIT，见 [LICENSE](LICENSE)。
 
-数据来源 [Zitann/HarmonyOS-Haps](https://github.com/Zitann/HarmonyOS-Haps) 遵循其自身许可。
+应用清单来自 [Zitann/HarmonyOS-Haps](https://github.com/Zitann/HarmonyOS-Haps)，
+其许可与署名以原仓库说明为准。
 
 构建、发版与快照自动化的维护笔记见 [DEVELOP.md](DEVELOP.md)。
