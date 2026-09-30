@@ -5,7 +5,7 @@
  *     仓库里的 data/manifest.json 也是按同一坐标生成的（sync/manifest.py --repo OWNER/REPO）。
  */
 
-export const REPO_OWNER: string = 'maxzhai';
+export const REPO_OWNER: string = 'zhailinlang';
 export const REPO_NAME: string = 'hapstore';
 export const REPO_PATH: string = `${REPO_OWNER}/${REPO_NAME}`;
 

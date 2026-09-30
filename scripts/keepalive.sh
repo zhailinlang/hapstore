@@ -10,8 +10,8 @@
 #   export GH_TOKEN=ghp_xxx        # 或 gh auth login
 #   ./scripts/keepalive.sh
 #
-# crontab 示例（每周一 09:00）：
-#   0 9 * * 1 /Users/maxzhai/Dev/hapstore/scripts/keepalive.sh >> /tmp/hapstore-keepalive.log 2>&1
+# crontab 示例（每周一 09:00，把 <仓库路径> 换成你本机克隆的位置）：
+#   0 9 * * 1 cd <仓库路径> && ./scripts/keepalive.sh >> /tmp/hapstore-keepalive.log 2>&1
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

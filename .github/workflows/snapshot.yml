@@ -52,7 +52,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: sync/state.json
-          key: sync-state-${{ github.run_id }}
+          key: sync-state-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
             sync-state-
 
@@ -77,10 +77,12 @@ jobs:
           set -e
           if ! gh release view snapshot-latest >/dev/null 2>&1; then
             echo "滚动 Release 不存在，先创建"
+            # 末尾 || true：本地 release.sh 与本轮撞车时会返回 422 already_exists，
+            # 不算错误 —— 真正幂等的是下面那句 upload --clobber。
             gh release create snapshot-latest \
               --title "数据快照（滚动）" \
               --notes "每日自动更新的 apps.json。App 版本请到 Releases 里找，不要在这里下载。" \
-              --prerelease
+              --prerelease || true
           fi
           gh release upload snapshot-latest data/apps.json data/manifest.json --clobber
 
@@ -115,9 +117,13 @@ jobs:
             echo "manifest 无变化，跳过提交"
           else
             git commit -m "chore(data): 更新快照指针 $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
-            git push
+            # 显式 refspec：checkout 一旦带 ref 输入变 detached HEAD，裸 push 会报
+            # "fatal: You are not currently on a branch"
+            git push origin "HEAD:${{ github.ref_name }}"
           fi
 
+      # 兜底分支那步是 continue-on-error，失败整轮照样绿。这里把两条地址的实际状态
+      # 码打出来，让失败可见；sha256 回验能抓到「manifest 生成早于 apps.json」这类顺序错。
       - name: 汇总
         run: |
           echo "快照大小：$(wc -c < data/apps.json) 字节"
@@ -126,3 +132,17 @@ jobs:
           d = json.load(open('data/apps.json', encoding='utf-8'))
           print(f'应用总数 {d[\"totalApps\"]}，可用 {d[\"availableApps\"]}，stale={d[\"stale\"]}')
           "
+
+          echo "--- sha256 回验 ---"
+          python3 -c 'import hashlib, json
+          actual = hashlib.sha256(open("data/apps.json","rb").read()).hexdigest()
+          recorded = json.load(open("data/manifest.json", encoding="utf-8"))["snapshot"]["sha256"]
+          print("manifest 记录:", recorded)
+          print("实际文件    :", actual)
+          print("一致" if actual == recorded else "⚠️ 不一致：manifest 可能生成早于快照")'
+
+          echo "--- 两条地址连通性（约 5 分钟 CDN 缓存，刚推完可能还是旧值）---"
+          curl -sIL -o /dev/null -w '主地址   HTTP %{http_code}\n' \
+            "https://github.com/${{ github.repository }}/releases/download/snapshot-latest/apps.json"
+          curl -sI -o /dev/null -w '兜底地址 HTTP %{http_code}\n' \
+            "https://raw.githubusercontent.com/${{ github.repository }}/snapshot-data/apps.json"

@@ -156,9 +156,19 @@ def main() -> int:
             'size': 0,
             'sha256': '',
             'publishedAt': '',
-            'releaseUrl': f'https://github.com/{repo}/releases/latest',
+            'releaseUrl': '',
             'notes': '',
         }
+        # 但 URL 里的 repo 必须跟着当前 --repo 走：换仓库名时不能沿用旧地址，
+        # 否则 App 自更新会一直指向已经失效的旧仓库。
+        app['releaseUrl'] = f'https://github.com/{repo}/releases/latest'
+        # 只有已经发过版（downloadUrl 非空）才重写下载地址，否则会凭空造出一个
+        # 指向不存在资产的 URL，让 App 以为有新版可下、一点就 404
+        if app.get('downloadUrl') and app.get('versionName'):
+            ver = app['versionName']
+            app['downloadUrl'] = (
+                f'https://github.com/{repo}/releases/download/v{ver}/HapStore-v{ver}.hap'
+            )
 
     out = {
         'schemaVersion': MANIFEST_SCHEMA,

@@ -21,7 +21,7 @@ python3 sync.py --workers 6      # 网页模式并发数（默认 6）
 
 | 通道 | 触发条件 | 配额 | 体积信息 | 并发 |
 |---|---|---|---|---|
-| API | 有 `GITHUB_TOKEN` 或剩余配额 > 2 | 5000/小时（带 Token）、60/小时（未鉴权） | 有 | 串行（避免触发限流） |
+| API | 有 `GITHUB_TOKEN` 或剩余配额 > 2 | 1000/小时（Actions 里的 `GITHUB_TOKEN`）、5000/小时（个人 PAT）、60/小时（未鉴权） | 有 | 串行（避免触发限流） |
 | 网页抓取 | 无配额 / 显式 `--mode html` | 无硬限流 | 有（HEAD 探测） | 默认 6 线程 |
 
 网页抓取的三个关键点（都踩过坑）：
@@ -62,7 +62,7 @@ python3 sync.py --workers 6      # 网页模式并发数（默认 6）
 
 ## 产物
 
-`public/apps.json`，schemaVersion 2：
+`data/apps.json`，schemaVersion 2（被 `.gitignore` 排除，不入库，只作 Release 资产分发）：
 
 ```jsonc
 {
@@ -123,11 +123,26 @@ python3 sync.py --workers 6      # 网页模式并发数（默认 6）
 后者需要先 unlink 已存在的文件，在受限环境下会被拒绝（`rename overwrite refused`），
 实测导致跑了 15 分钟的全量抓取在最后一刻全丢。
 
-## 部署到服务器（验证后）
+## 自动化（GitHub Actions）
+
+本机不跑定时同步，全部交给 `.github/workflows/snapshot.yml`：
 
 ```bash
-# cron 每 6 小时
-17 */6 * * * cd /opt/hapstore-sync && GITHUB_TOKEN=xxx python3 sync.py >> /var/log/hapstore.log 2>&1
+# 手动触发（force=true 忽略 ETag 全量重抓）
+gh workflow run snapshot.yml -f force=true
+
+# 查看最近几次运行
+gh run list --workflow=snapshot.yml
 ```
 
-Caddy 托管 `public/` 目录，`apps.json` 建议 `Cache-Control: public, max-age=300`。
+工作流每天 UTC 04:23 / 16:23（北京 12:23 / 00:23）跑一次，产出两个发布物：
+
+| 产出 | 去向 | 用途 |
+|---|---|---|
+| `data/apps.json` | Release 滚动资产 `snapshot-latest` | 主地址，URL 永久稳定，可被 ghfast.top 等镜像代理 |
+| `data/apps.json` + `manifest.json` | `snapshot-data` 分支强推 | raw 兜底地址，单提交无历史膨胀 |
+
+`snapshot-latest` **必须标 prerelease**，否则会抢走 `/releases/latest`（那是 App 自更新用的）。
+
+增量状态 `state.json` 不入库，走 `actions/cache` 续命：key 必须带 `run_id`，
+静态 key 会让 cache 永不更新、ETag 不再变化、快照从此不再更新。
