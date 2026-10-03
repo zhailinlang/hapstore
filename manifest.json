@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-04T03:19:39+08:00",
+  "repo": "zhailinlang/hapstore",
+  "snapshot": {
+    "url": "https://github.com/zhailinlang/hapstore/releases/download/snapshot-latest/apps.json",
+    "altUrl": "https://raw.githubusercontent.com/zhailinlang/hapstore/snapshot-data/apps.json",
+    "size": 598873,
+    "sha256": "e7ccb7ac14d4661c36352c34eed21b461273d977e09f408fcb7ff0bba92779bf",
+    "schemaVersion": 2,
+    "generatedAt": "2026-10-03T19:19:39+00:00",
+    "minAppVersionCode": 1000000
+  },
+  "app": {
+    "versionCode": 1000000,
+    "versionName": "1.0.0",
+    "tag": "v1.0.0",
+    "downloadUrl": "https://github.com/zhailinlang/hapstore/releases/download/v1.0.0/HapStore-v1.0.0-signed.hap",
+    "size": 1587098,
+    "sha256": "561263736fe75699bae418543189ebf3f2395500c27a1922ad35b8f0207e3cb3",
+    "publishedAt": "2026-09-30T14:56:45+08:00",
+    "releaseUrl": "https://github.com/zhailinlang/hapstore/releases/latest",
+    "notes": "HapStore v1.0.0 —— 鸿蒙未上架 HAP 聚合商店首个正式版\n\n**HapStore-v1.0.0-signed.hap** —— 签名版，可直接安装：\n`hdc install HapStore-v1.0.0-signed.hap`\n\n**HapStore-v1.0.0-unsigned.hap** —— 未签名版，供你用自己的证书重签。\n鸿蒙要求 HAP 必须签名才能安装，未签名版直接装会失败，仅在你不想用本项目证书时使用。\n\n功能：\n- 内置 87 个应用快照，首次打开离线可用\n- 每日两次自动刷新快照（GitHub Actions），App 内「检查更新」拉取\n- 镜像加速、断点续传下载，内置安装引导\n- App 自身支持版本检查与下载更新",
+    "unsignedUrl": "https://github.com/zhailinlang/hapstore/releases/download/v1.0.0/HapStore-v1.0.0-unsigned.hap",
+    "unsignedSize": 1541122,
+    "unsignedSha256": "bd55ae0c16a741a6c9a4b9f3034a579710f2c8b81219ced9849e6a086be0096a"
+  }
+}
