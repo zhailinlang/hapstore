@@ -2,6 +2,10 @@
 
 只想用 App 的话看 [README.md](README.md)。这份是给自己看的：怎么构建、怎么发版、快照怎么自动更新、出问题怎么排查。
 
+**踩坑记录与验证方法**单独整理在 [docs/DEV-EXPERIENCE.md](docs/DEV-EXPERIENCE.md) ——
+模拟器联调、沙箱文件读写、toast 抓取、失败分支怎么造、设置项 schema 迁移等，
+这份只讲「是什么」，那份讲「为什么」和「怎么办」。
+
 ---
 
 ## 数据流
@@ -129,6 +133,10 @@ CDN 不同步是常态：Release 资产约 1-2 分钟刷新，raw 兜底 5 分�
 | 构建报 symbol table 路径错 | hvigor 缓存残留旧绝对路径，`rm -rf app/entry/build app/.hvigor` 后重建 |
 | 覆盖安装后数据源还是旧地址 | 覆盖安装不清数据，旧持久化的 `sourceUrl` 会压过新默认值。卸载重装，或点「恢复默认地址」 |
 | push 报 terminal prompts disabled | `gh auth setup-git` 把 gh 凭据接给 git |
+| 构建报 delete 失败 Operation not permitted | 文件带 macOS `com.apple.provenance` 扩展属性，`rm -rf app/entry/build` 后重建 |
+| 模拟器 hdc 一直 `[Empty]` | 启动 emulator 必须显式 `-hdcPort 10001`，且 `instancePath` 指向 `deployed` 根目录。详见 [docs/DEV-EXPERIENCE.md](docs/DEV-EXPERIENCE.md) |
+| 改不了设备上的沙箱文件 | shell 无写权限、`sed` 不支持 `-i`、设备无 python3 → 用 `hdc file send` 整文件覆盖 |
+| 截图抓不到 toast | toast 只活 ~1.6 秒，要在**设备端**循环 `snapshot_display` 连拍；判断有没有弹看 hilog 的 `AceOverlay: Toast node mount` |
 
 ---
 
