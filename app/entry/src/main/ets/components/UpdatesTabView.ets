@@ -1,6 +1,6 @@
 import { common } from '@kit.AbilityKit';
 import { promptAction, router } from '@kit.ArkUI';
-import { AppInfo, StoreData, appReleases, formatDate } from '../model/AppInfo';
+import { AppInfo, StoreData, formatDate } from '../model/AppInfo';
 import { InstalledUpdate } from '../model/UpdateInfo';
 import { DownloadRecord } from '../model/DownloadRecord';
 import { DownloadStore } from '../service/DownloadStore';
@@ -8,17 +8,13 @@ import { NetworkService } from '../service/NetworkService';
 import { StoreRepository } from '../service/StoreRepository';
 import { DownloadPanel } from './DownloadPanel';
 import {
-  buildTimeline,
   findAppById,
   findInstalledUpdates
 } from '../service/UpdateCompare';
 import { Theme } from '../common/constants/ThemeConstants';
-import { AppIconView } from './AppIcon';
 import { UpdateCenter } from '../service/UpdateCenter';
 import { AppUpdateService } from '../service/AppUpdateService';
 import { CheckOutcome } from '../model/UpdateOutcome';
-
-const TIMELINE_LIMIT: number = 20;
 
 function daysAgo(iso: string): string {
   if (iso.length === 0) {
@@ -38,16 +34,6 @@ function daysAgo(iso: string): string {
   return `${days} 天前`;
 }
 
-function latestTagOf(app: AppInfo): string {
-  const rel = appReleases(app);
-  return rel.length > 0 ? (rel[0].tag ?? '') : '—';
-}
-
-function latestPublishedAtOf(app: AppInfo): string {
-  const rel = appReleases(app);
-  return rel.length > 0 ? (rel[0].publishedAt ?? '') : '';
-}
-
 function stamp(ms: number): string {
   if (ms <= 0) {
     return '从未检查';
@@ -61,7 +47,7 @@ function stamp(ms: number): string {
 /**
  * 「更新」Tab：离线优先。
  *
- * 不配数据源也能用：展示快照新鲜度、已下载应用的新版本提醒、最近更新时间线。
+ * 不配数据源也能用：展示快照新鲜度、已下载应用的新版本提醒。
  * 配了数据源 URL 后「检查更新」才真正联网拉远端 apps.json 并做差异比对。
  */
 @Component
@@ -69,7 +55,6 @@ export struct UpdatesTabView {
   @State data: StoreData | null = null;
   @State loading: boolean = true;
   @State checking: boolean = false;
-  @State timeline: AppInfo[] = [];
   @State installed: InstalledUpdate[] = [];
   @State sourceLabel: string = '';
   @State msg: string = '';
@@ -94,7 +79,6 @@ export struct UpdatesTabView {
     repo.load().then((d: StoreData) => {
       this.data = d;
       this.loading = false;
-      this.timeline = buildTimeline(d, TIMELINE_LIMIT);
       const records: DownloadRecord[] = new DownloadStore(ctx).list();
       this.installed = findInstalledUpdates(d, records);
       this.sourceLabel = repo.lastSource === 'cache' ? '本地缓存（远端同步过）' : '内置快照';
@@ -164,7 +148,7 @@ export struct UpdatesTabView {
         .fontColor(Theme.textMain)
         .width('100%')
         .padding({ left: 16, right: 16, top: 14, bottom: 2 })
-      Text('快照新鲜度、已下载应用的新版本提醒与最近发布时间线')
+      Text('快照新鲜度、已下载应用的新版本提醒')
         .fontSize(12)
         .fontColor(Theme.textSub)
         .width('100%')
@@ -188,7 +172,6 @@ export struct UpdatesTabView {
                 this.openApp(id);
               }
             })
-            this.TimelineCard()
           }
           .width('100%')
           .padding({ left: 16, right: 16, bottom: 20 })
@@ -281,44 +264,5 @@ export struct UpdatesTabView {
       }
     }
     .width('100%')
-  }
-
-  @Builder
-  TimelineCard() {
-    Column({ space: 8 }) {
-      Text('最近更新')
-        .fontSize(15)
-        .fontWeight(FontWeight.Medium)
-        .fontColor(Theme.textMain)
-        .width('100%')
-
-      ForEach(this.timeline, (app: AppInfo) => {
-        Row({ space: 10 }) {
-          AppIconView(app, 36, 9)
-          Column({ space: 2 }) {
-            Text(app.name)
-              .fontSize(14)
-              .fontColor(Theme.textMain)
-              .maxLines(1)
-              .textOverflow({ overflow: TextOverflow.Ellipsis })
-            Text(`${latestTagOf(app)} · ${formatDate(latestPublishedAtOf(app))}`)
-              .fontSize(12)
-              .fontColor(Theme.textSub)
-          }
-          .alignItems(HorizontalAlign.Start)
-          .layoutWeight(1)
-        }
-        .width('100%')
-        .padding({ top: 8, bottom: 8 })
-        .onClick(() => {
-          this.openApp(app.id);
-        })
-      }, (app: AppInfo) => app.id)
-    }
-    .width('100%')
-    .padding(14)
-    .borderRadius(Theme.radius)
-    .backgroundColor(Theme.card)
-    .alignItems(HorizontalAlign.Start)
   }
 }

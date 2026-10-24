@@ -85,33 +85,6 @@ export function diffStore(local: StoreData, remote: StoreData): StoreDiff {
   return diff;
 }
 
-/** 最近更新时间线：按最新 release 的发布时间倒序，没发布时间的排后面。 */
-export function buildTimeline(data: StoreData, limit: number): AppInfo[] {
-  const apps: AppInfo[] = flatApps(data);
-  const withTime: AppInfo[] = [];
-  const withoutTime: AppInfo[] = [];
-  for (let i = 0; i < apps.length; i++) {
-    if (latestPublishedAt(apps[i]).length > 0) {
-      withTime.push(apps[i]);
-    } else {
-      withoutTime.push(apps[i]);
-    }
-  }
-  withTime.sort((a: AppInfo, b: AppInfo) => {
-    const at: string = latestPublishedAt(a);
-    const bt: string = latestPublishedAt(b);
-    if (at === bt) {
-      return 0;
-    }
-    return at > bt ? -1 : 1;
-  });
-  const all: AppInfo[] = withTime.concat(withoutTime);
-  if (all.length > limit) {
-    return all.slice(0, limit);
-  }
-  return all;
-}
-
 /** 已下载过的应用里，哪些在当前快照中有了新版本。 */
 export function findInstalledUpdates(data: StoreData, records: DownloadRecord[]): InstalledUpdate[] {
   const apps: AppInfo[] = flatApps(data);
