@@ -41,10 +41,19 @@ export const BUILTIN_MIRRORS: MirrorItem[] = [
 ];
 
 export interface SettingsData {
+  /**
+   * 设置文件格式版本。
+   * v2 起 autoCheckOnLaunch 语义变为「打开 App 就更新并弹提示」，v1 的存量用户迁移时统一开启。
+   */
   schemaVersion: number;
   /** 远端 apps.json 地址；为空则更新页只做离线比对 */
   sourceUrl: string;
+  /**
+   * 打开 App 时自动检查更新（拉远端快照 → 比对 → 直接生效）。
+   * 默认开启：这是 App 的核心价值之一，用户不该记得手动点「检查更新」。
+   */
   autoCheckOnLaunch: boolean;
+  /** 两次自动检查之间的最小间隔（小时），避免频繁开 App 反复请求 */
   checkIntervalHours: number;
   lastCheckAt: number;
   lastRemoteGeneratedAt: string;
@@ -83,10 +92,10 @@ export interface SettingsData {
 
 export function DEFAULT_SETTINGS(): SettingsData {
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     // 新装默认指向仓库里的滚动快照；老用户 settings.json 里已有的值不会被覆盖
     sourceUrl: DEFAULT_SOURCE_URL,
-    autoCheckOnLaunch: false,
+    autoCheckOnLaunch: true,
     checkIntervalHours: 24,
     lastCheckAt: 0,
     lastRemoteGeneratedAt: '',

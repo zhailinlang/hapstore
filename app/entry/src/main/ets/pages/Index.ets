@@ -1,9 +1,7 @@
 import { common } from '@kit.AbilityKit';
 import { DownloadStore } from '../service/DownloadStore';
-import { RemoteStoreService } from '../service/RemoteStoreService';
 import { SettingsStore } from '../service/SettingsStore';
-import { NetworkService } from '../service/NetworkService';
-import { StoreDiff } from '../model/UpdateInfo';
+import { UpdateCenter } from '../service/UpdateCenter';
 import { AppsTabView } from '../components/AppsTabView';
 import { UpdatesTabView } from '../components/UpdatesTabView';
 import { SettingsTabView } from '../components/SettingsTabView';
@@ -32,29 +30,25 @@ struct Index {
     AppStorage.setOrCreate('activeDownloads', store.activeCount());
   }
 
-  /** 启动时按需静默检查一次远端更新，只更新「更新」Tab 的红点。 */
+  /**
+   * 启动时自动检查更新。
+   *
+   * 走 UpdateCenter 的统一编排：拉远端快照 → 比对 → 直接写入本机生效，
+   * 同时检查 App 自身有没有新版本；有更新或失败时弹 tips 说明结果。
+   * 用户在设置里关掉开关就不会触发。
+   */
   private autoCheck(): void {
-    const s = SettingsStore.shared().get();
-    if (!s.autoCheckOnLaunch || s.sourceUrl.length === 0) {
-      return;
-    }
-    if (Date.now() - s.lastCheckAt < s.checkIntervalHours * 3600 * 1000) {
-      return;
-    }
-    if (!NetworkService.isOnline()) {
-      return;
-    }
     const ctx: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
-    new RemoteStoreService(ctx).check().then((diff: StoreDiff | null) => {
-      if (diff === null) {
-        // 304：快照没变，不写红点，但记一次检查时间
-        SettingsStore.shared().apply({ lastCheckAt: Date.now() });
+    new UpdateCenter(ctx).autoCheckOnLaunch().then((outcome) => {
+      if (outcome === null) {
         return;
       }
-      AppStorage.setOrCreate('updateCount', diff.changeCount);
-      SettingsStore.shared().apply({ lastCheckAt: Date.now() });
+      // 快照已经生效过，这里只需要刷新一下列表与红点
+      const epoch: number = AppStorage.get<number>('storeEpoch') ?? 0;
+      AppStorage.setOrCreate('storeEpoch', epoch + 1);
+      AppStorage.setOrCreate('updateCount', 0);
     }).catch(() => {
-      // 静默检查失败不打扰用户
+      // 静默检查失败不打扰用户（UpdateCenter 内部已经处理过提示）
     });
   }
 

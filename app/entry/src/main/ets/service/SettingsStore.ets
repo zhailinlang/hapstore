@@ -230,7 +230,20 @@ export class SettingsStore {
       // 想纯离线的话关掉「启动时自动检查」即可，不影响手动检查
       const migratedUrl: string = (parsed.sourceUrl ?? '').trim();
       base.sourceUrl = migratedUrl.length > 0 ? migratedUrl : base.sourceUrl;
-      base.autoCheckOnLaunch = parsed.autoCheckOnLaunch ?? false;
+      // autoCheckOnLaunch 的语义在 schemaVersion=2 时变了：
+      // v1 是「静默检查只刷红点」，v2 是「打开 App 就拉最新快照并生效，有更新/失败弹提示」。
+      // 语义变了就不能沿用老用户存的 false —— 那是针对另一个功能点的选择，
+      // 所以 v1 的存量用户一律迁到开启（等于给一次明确的弹窗体验），
+      // v2 之后的用户则严格尊重他自己关掉的开关。
+      const storedSchema: number = parsed.schemaVersion ?? 1;
+      base.schemaVersion = storedSchema;
+      base.autoCheckOnLaunch = storedSchema >= 2
+        ? (parsed.autoCheckOnLaunch ?? true)
+        : true;
+      // v1 的用户迁到 v2，把新语义落盘，下次启动就不会再迁一次
+      if (storedSchema < 2) {
+        base.schemaVersion = 2;
+      }
       base.checkIntervalHours = parsed.checkIntervalHours ?? 24;
       base.lastCheckAt = parsed.lastCheckAt ?? 0;
       base.lastRemoteGeneratedAt = parsed.lastRemoteGeneratedAt ?? '';
@@ -253,9 +266,13 @@ export class SettingsStore {
       // 文件里的 mirrorTemplate 一律不信：残缺模板（不含 {url}）会让镜像静默失效
       base.mirrorTemplate = SettingsStore.templateOf(base);
       this.data = base;
+      // 迁移过就把新版本号落盘，避免下次启动再迁一次
+      if (storedSchema < 2) {
+        this.persist();
+      }
     } catch (e) {
       // 读坏了也保留默认骨架，不再整体回落导致用户设置凭空消失
-      this.data.schemaVersion = 1;
+      this.data.schemaVersion = 2;
       this.data.mirrorTemplate = SettingsStore.templateOf(this.data);
     }
   }

@@ -1,23 +1,22 @@
 import { common } from '@kit.AbilityKit';
 import { promptAction, router } from '@kit.ArkUI';
 import { AppInfo, StoreData, appReleases, formatDate } from '../model/AppInfo';
-import { InstalledUpdate, StoreDiff, VersionChange } from '../model/UpdateInfo';
+import { InstalledUpdate } from '../model/UpdateInfo';
 import { DownloadRecord } from '../model/DownloadRecord';
 import { DownloadStore } from '../service/DownloadStore';
-import { FetchedText, RemoteStoreService } from '../service/RemoteStoreService';
-import { SettingsStore } from '../service/SettingsStore';
-import { SUPPORTED_SCHEMA_VERSION } from '../common/constants/AppConstants';
 import { NetworkService } from '../service/NetworkService';
 import { StoreRepository } from '../service/StoreRepository';
 import { DownloadPanel } from './DownloadPanel';
 import {
   buildTimeline,
-  diffStore,
   findAppById,
   findInstalledUpdates
 } from '../service/UpdateCompare';
 import { Theme } from '../common/constants/ThemeConstants';
 import { AppIconView } from './AppIcon';
+import { UpdateCenter } from '../service/UpdateCenter';
+import { AppUpdateService } from '../service/AppUpdateService';
+import { CheckOutcome } from '../model/UpdateOutcome';
 
 const TIMELINE_LIMIT: number = 20;
 
@@ -70,18 +69,19 @@ export struct UpdatesTabView {
   @State data: StoreData | null = null;
   @State loading: boolean = true;
   @State checking: boolean = false;
-  @State diff: StoreDiff | null = null;
   @State timeline: AppInfo[] = [];
   @State installed: InstalledUpdate[] = [];
   @State sourceLabel: string = '';
   @State msg: string = '';
+  @State selfVersion: string = '';
   @StorageLink('updateCount') updateCount: number = 0;
   @StorageProp('sourceUrl') sourceUrl: string = '';
   @StorageProp('lastCheckAt') lastCheckAt: number = 0;
-  private pendingText: string = '';
 
   aboutToAppear(): void {
     this.refreshLocal();
+    // 页面再次露出时也刷新一次，避免用户在外面改了设置回来看到旧数据
+    this.selfVersion = AppUpdateService.selfVersionName();
   }
 
   private ctx(): common.UIAbilityContext {
@@ -104,73 +104,44 @@ export struct UpdatesTabView {
     });
   }
 
+  /**
+   * 「检查更新」按钮：一次点完整个流程。
+   *
+   * 拉远端快照 → 比对 → 直接写入本机生效 → 检查 App 自身版本 → 弹结果 tips。
+   * 不再有「应用更新到本机数据」这种需要用户再点一次的中间步骤。
+   */
   private async checkUpdate(): Promise<void> {
     if (this.checking) {
       return;
     }
     if (!NetworkService.isOnline()) {
       promptAction.showToast({ message: '当前无网络' });
+      this.msg = '当前无网络';
       return;
     }
-    if (this.sourceUrl.length === 0) {
+    if (this.sourceUrl.trim().length === 0) {
       promptAction.showToast({ message: '请先在「设置」里配置数据源地址' });
+      this.msg = '未配置数据源地址';
       return;
     }
     this.checking = true;
-    this.msg = '正在检查…';
+    this.msg = '正在检查并更新…';
     try {
       const ctx: common.UIAbilityContext = this.ctx();
-      const service: RemoteStoreService = new RemoteStoreService(ctx);
-      const got: FetchedText = await service.fetchText(SettingsStore.shared().get().snapshotEtag);
-      if (got.notModified) {
-        // 304：服务端说快照没变，不用解析也不用落盘
-        this.pendingText = '';
-        this.diff = null;
-        this.updateCount = 0;
-        SettingsStore.shared().apply({ lastCheckAt: Date.now() });
-        this.msg = '已是最新，快照没有变化';
-        return;
-      }
-      const remote: StoreData = new StoreRepository(ctx).parseText(got.text);
-      if ((remote.schemaVersion ?? 0) !== SUPPORTED_SCHEMA_VERSION) {
-        throw new Error(`快照格式为 v${remote.schemaVersion ?? 0}，当前 App 只支持 v${SUPPORTED_SCHEMA_VERSION}，请先更新 HapStore`);
-      }
-      const local: StoreData = this.data ?? await service.loadLocal();
-      this.pendingText = got.text;
-      const result: StoreDiff = diffStore(local, remote);
-      this.diff = result;
-      this.updateCount = result.changeCount;
-      SettingsStore.shared().apply({ lastCheckAt: Date.now(), lastRemoteGeneratedAt: remote.generatedAt });
-      if (result.changeCount === 0 && result.removed.length === 0) {
-        this.msg = '已是最新，没有变化';
-      } else {
-        this.msg = `新增 ${result.added.length} 个、版本更新 ${result.versionChanged.length} 个、移除 ${result.removed.length} 个`;
-      }
+      const outcome: CheckOutcome = await new UpdateCenter(ctx).runFullCheck(false);
+      // 结论写进页面，tips 也弹一次，两边都能看到结果
+      this.msg = UpdateCenter.outcomeText(outcome);
+      this.selfVersion = outcome.selfVersionName;
+      this.updateCount = 0;
+      // 快照可能已经换掉了，重新加载本地数据与时间线
+      this.refreshLocal();
+      promptAction.showToast({ message: this.msg });
     } catch (e) {
-      this.msg = `检查失败：${(e as Error).message}`;
+      const err: Error = e as Error;
+      this.msg = `更新失败：${err.message ?? '未知错误'}`;
+      promptAction.showToast({ message: this.msg });
     } finally {
       this.checking = false;
-    }
-  }
-
-  private applyUpdate(): void {
-    if (this.pendingText.length === 0) {
-      return;
-    }
-    try {
-      const ctx: common.UIAbilityContext = this.ctx();
-      const service: RemoteStoreService = new RemoteStoreService(ctx);
-      service.applyRemote(this.pendingText);
-      const epoch: number = AppStorage.get<number>('storeEpoch') ?? 0;
-      AppStorage.setOrCreate('storeEpoch', epoch + 1);
-      this.updateCount = 0;
-      this.diff = null;
-      this.pendingText = '';
-      this.msg = '已应用更新';
-      this.refreshLocal();
-      promptAction.showToast({ message: '已更新到最新数据' });
-    } catch (e) {
-      this.msg = `应用失败：${(e as Error).message}`;
     }
   }
 
@@ -211,9 +182,6 @@ export struct UpdatesTabView {
           Column({ space: 10 }) {
             this.FreshnessCard()
             this.CheckRow()
-            if (this.diff) {
-              this.DiffCard(this.diff as StoreDiff)
-            }
             DownloadPanel({
               installed: this.installed,
               onOpenApp: (id: string): void => {
@@ -270,6 +238,10 @@ export struct UpdatesTabView {
         .fontSize(13)
         .fontColor(Theme.textSub)
         .width('100%')
+      Text(`HapStore 当前版本：v${this.selfVersion.length > 0 ? this.selfVersion : '—'}`)
+        .fontSize(13)
+        .fontColor(Theme.textSub)
+        .width('100%')
     }
     .width('100%')
     .padding(14)
@@ -281,7 +253,7 @@ export struct UpdatesTabView {
   @Builder
   CheckRow() {
     Column({ space: 6 }) {
-      Button(this.checking ? '检查中…' : '检查更新')
+      Button(this.checking ? '正在检查并更新…' : '检查更新')
         .width('100%')
         .height(44)
         .fontSize(15)
@@ -297,84 +269,18 @@ export struct UpdatesTabView {
         .fontSize(12)
         .fontColor(Theme.textSub)
         .width('100%')
+      Text('点一次即完成：拉取最新快照 → 比对差异 → 直接写入本机生效 → 同时检查 HapStore 自身版本')
+        .fontSize(11)
+        .fontColor(Theme.textSub)
+        .width('100%')
       if (this.msg.length > 0) {
         Text(this.msg)
           .fontSize(12)
-          .fontColor(Theme.primary)
+          .fontColor(this.msg.indexOf('失败') >= 0 ? Theme.danger : Theme.primary)
           .width('100%')
       }
     }
     .width('100%')
-  }
-
-  @Builder
-  DiffCard(diff: StoreDiff) {
-    Column({ space: 8 }) {
-      Text('远端差异')
-        .fontSize(15)
-        .fontWeight(FontWeight.Medium)
-        .fontColor(Theme.textMain)
-        .width('100%')
-
-      Text(`远端快照 ${formatDate(diff.newGeneratedAt)} · schema ${diff.newSchemaVersion}`)
-        .fontSize(12)
-        .fontColor(Theme.textSub)
-        .width('100%')
-
-      if (diff.added.length > 0) {
-        Text(`新增 ${diff.added.length} 个应用`)
-          .fontSize(13)
-          .fontColor(Theme.success)
-          .width('100%')
-        ForEach(diff.added, (app: AppInfo) => {
-          Text(`${app.name} · ${app.category}`)
-            .fontSize(12)
-            .fontColor(Theme.textSub)
-            .width('100%')
-            .padding({ left: 8 })
-        }, (app: AppInfo) => app.id)
-      }
-
-      if (diff.versionChanged.length > 0) {
-        Text(`${diff.versionChanged.length} 个应用有版本更新`)
-          .fontSize(13)
-          .fontColor(Theme.primary)
-          .width('100%')
-          .margin({ top: 4 })
-        ForEach(diff.versionChanged, (c: VersionChange) => {
-          Text(`${c.name}：${c.oldTag} → ${c.newTag}`)
-            .fontSize(12)
-            .fontColor(Theme.textSub)
-            .width('100%')
-            .padding({ left: 8 })
-        }, (c: VersionChange) => c.id)
-      }
-
-      if (diff.removed.length > 0) {
-        Text(`移除 ${diff.removed.length} 个应用`)
-          .fontSize(13)
-          .fontColor(Theme.danger)
-          .width('100%')
-          .margin({ top: 4 })
-      }
-
-      Button('应用更新到本机数据')
-        .width('100%')
-        .height(40)
-        .fontSize(14)
-        .borderRadius(20)
-        .backgroundColor(Theme.primaryLight)
-        .fontColor(Theme.primary)
-        .margin({ top: 6 })
-        .onClick(() => {
-          this.applyUpdate();
-        })
-    }
-    .width('100%')
-    .padding(14)
-    .borderRadius(Theme.radius)
-    .backgroundColor(Theme.card)
-    .alignItems(HorizontalAlign.Start)
   }
 
   @Builder

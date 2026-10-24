@@ -546,7 +546,7 @@ export struct SettingsTabView {
             SettingsStore.shared().apply({ sourceUrl: v });
           })
 
-        this.SwitchRow('启动时自动检查', '仅在配置了数据源时生效', this.autoCheckOnLaunch,
+        this.SwitchRow('启动时自动检查更新', '打开 App 自动拉最新快照并生效；有更新或失败时弹提示', this.autoCheckOnLaunch,
           (v: boolean) => {
             SettingsStore.shared().apply({ autoCheckOnLaunch: v });
           })
@@ -580,7 +580,7 @@ export struct SettingsTabView {
           })
         }
         .width('100%')
-        Text('检查动作在「更新」页执行；快照没变时服务端返回 304，不再重复下载')
+        Text('检查动作在「更新」页执行；点一次即完成拉取、比对、写入生效；快照没变时服务端返回 304，不再重复下载')
           .fontSize(11)
           .fontColor(Theme.textSub)
           .width('100%')
