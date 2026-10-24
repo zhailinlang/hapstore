@@ -78,9 +78,13 @@ App 会自动识别、递归解开，然后引导你装真正的 HAP。
 |---|---|
 | ![应用列表](docs/screenshots/apps.jpeg) | ![详情与下载](docs/screenshots/detail.jpeg) |
 
-| 下载管理 | 设置 |
+| 更新 | 下载管理 |
 |---|---|
-| ![下载管理](docs/screenshots/downloads.jpeg) | ![设置](docs/screenshots/settings.jpeg) |
+| ![更新](docs/screenshots/updates.jpeg) | ![下载管理](docs/screenshots/downloads.jpeg) |
+
+| 设置 |
+|---|
+| ![设置](docs/screenshots/settings.jpeg) |
 
 ---
 
