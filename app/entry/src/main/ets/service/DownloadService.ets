@@ -291,6 +291,25 @@ export class DownloadService {
     return true;
   }
 
+  /**
+   * 找某个资产最近一次成功下载落在沙箱里的路径。
+   *
+   * 装机工具要读沙箱文件必须先拿到 file:// URI，而 UI 层拿不到 tid，
+   * 所以按「应用 id + 资产名」倒着找最近一条有本地副本的记录。
+   */
+  latestLocalPath(appId: string, assetName: string): string {
+    const list: DownloadRecord[] = this.store.list();
+    for (let i = list.length - 1; i >= 0; i--) {
+      const rec: DownloadRecord = list[i];
+      if (rec.appId === appId && rec.assetName === assetName && rec.localPath.length > 0) {
+        if (this.files.existsLocal(rec.localPath)) {
+          return rec.localPath;
+        }
+      }
+    }
+    return '';
+  }
+
   /** 删掉沙箱里的 HAP 副本（用户已经装完、想省空间时用）。 */
   deleteLocalFile(tid: string): boolean {
     const rec: DownloadRecord | null = this.store.find(tid);

@@ -37,6 +37,35 @@ HAP_EXT = ('.hap', '.hsp', '.app')
 # 详情页展示最近几个 Release（每个 Release 都要额外请求一次资产列表，别调太大）
 RELEASE_COUNT = 2
 
+# 压缩包。部分是「HAP 装进 zip」（发布方不想直接放 .hap），部分是桌面端/安卓端包。
+# 只有前者对鸿蒙用户有意义，靠文件名排除掉后者。
+ZIP_EXT = '.zip'
+# 命中这些词说明是给别的系统准备的，鸿蒙上装了没用
+DESKTOP_MARKS = (
+    'windows', 'win32', 'win64', 'win-x64', 'win_x64', '-win', '_win',
+    'macos', 'mac-arm', 'mac_x', 'mac-', 'mac_arm', 'darwin', 'osx',
+    'linux', 'ubuntu', 'deb', 'rpm', 'appimage',
+    'apk', 'android',
+)
+# 命中这些词说明是网页壳/纯前端包，不是能装的鸿蒙应用
+NON_HARMONY_MARKS = (
+    'web', 'webview', 'h5',
+)
+
+
+def is_harmony_zip(name: str) -> bool:
+    """这个 zip 是不是装着鸿蒙包的（而不是桌面端/安卓端发行包）。"""
+    low = name.lower()
+    if not low.endswith(ZIP_EXT):
+        return False
+    for mark in DESKTOP_MARKS:
+        if mark in low:
+            return False
+    for mark in NON_HARMONY_MARKS:
+        if mark in low:
+            return False
+    return True
+
 
 # ---------- 工具 ----------
 
@@ -121,19 +150,33 @@ def normalize_time(raw, today: dt.date) -> str | None:
 
 
 def split_assets(assets: list) -> tuple:
-    hap, other = [], []
+    """把 Release 资产拆成 (hap, hap_zip, other)。
+
+    hap_zip 是「里面装着 HAP 的压缩包」——发布方把 .hap 打包成 .zip 发的情况不少，
+    之前全被归到 other 里，App 侧就完全看不到，等于白收录。
+
+    注意字段名：API 模式拿到的原始资产用 browser_download_url，
+    而 state.json 里存的是上一轮处理过的 downloadUrl。
+    两种都要认，否则重跑分类会把下载地址全丢掉（表现为「能看见但下不了」）。
+    """
+    hap, hap_zip, other = [], [], []
     for a in assets or []:
+        url = a.get('browser_download_url', '') or a.get('downloadUrl', '')
         item = {
             'name': a.get('name', ''),
             'size': a.get('size', 0),
-            'downloadUrl': a.get('browser_download_url', ''),
-            'contentType': a.get('content_type', ''),
+            'downloadUrl': url,
+            'contentType': a.get('content_type', '') or a.get('contentType', ''),
         }
-        if item['name'].lower().endswith(HAP_EXT):
+        low = item['name'].lower()
+        if low.endswith(HAP_EXT):
             hap.append(item)
+        elif is_harmony_zip(low):
+            item['isZip'] = True
+            hap_zip.append(item)
         else:
             other.append(item)
-    return hap, other
+    return hap, hap_zip, other
 
 
 # ---------- 主流程 ----------
@@ -230,18 +273,19 @@ def main():
         print('  无可用 API 配额，改用网页抓取模式（体积信息不可用）')
 
     NO_RELEASE: dict = {'status': 'no_release', 'release': None, 'releases': [],
-                        'hapAssets': [], 'otherAssets': [], 'fail': 0}
+                        'hapAssets': [], 'hapZipAssets': [], 'otherAssets': [], 'fail': 0}
 
     def build_entry(releases: list, etag) -> dict:
         """把 release 列表转成 entry 的更新内容。"""
         rels = []
         for r in releases[:RELEASE_COUNT]:
-            hap, other = split_assets(r.get('assets'))
+            hap, hap_zip, other = split_assets(r.get('assets'))
             rels.append({
                 'tag': r.get('tag_name', ''),
                 'name': r.get('name', ''),
                 'publishedAt': r.get('published_at', ''),
                 'hapAssets': hap,
+                'hapZipAssets': hap_zip,
                 'otherAssets': other,
             })
         if not rels:
@@ -253,8 +297,10 @@ def main():
             # 兼容字段：列表页/卡片仍按「最新一次」渲染
             'release': rels[0],
             'hapAssets': rels[0]['hapAssets'],
+            'hapZipAssets': rels[0]['hapZipAssets'],
             'otherAssets': rels[0]['otherAssets'],
-            'status': 'ok' if rels[0]['hapAssets'] else 'no_hap',
+            # 有 hap 就能直接装；只有 zip 也算可下载（App 侧会先解压再装）
+            'status': 'ok' if rels[0]['hapAssets'] else ('ok' if rels[0]['hapZipAssets'] else 'no_hap'),
             'fail': 0,
         }
 
@@ -354,6 +400,7 @@ def main():
         a['release'] = e.get('release')
         a['releases'] = e.get('releases', [])
         a['hapAssets'] = e.get('hapAssets', [])
+        a['hapZipAssets'] = e.get('hapZipAssets', [])
         a['otherAssets'] = e.get('otherAssets', [])
 
     # 4.5) 打标：功能类型 / 设备类型 / 属性标签（规则引擎，离线零成本）

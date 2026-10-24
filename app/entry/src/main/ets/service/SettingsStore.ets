@@ -83,6 +83,14 @@ export class SettingsStore {
       this.data.listDensity = patch.listDensity;
       AppStorage.setOrCreate<string>('listDensity', this.data.listDensity);
     }
+    if (patch.sortId !== undefined) {
+      this.data.sortId = patch.sortId;
+      AppStorage.setOrCreate<string>('sortId', this.data.sortId);
+    }
+    if (patch.autoDownloadLatest !== undefined) {
+      this.data.autoDownloadLatest = patch.autoDownloadLatest;
+      AppStorage.setOrCreate<boolean>('autoDownloadLatest', this.data.autoDownloadLatest);
+    }
     if (patch.mirrorEnabled !== undefined) {
       this.data.mirrorEnabled = patch.mirrorEnabled;
       AppStorage.setOrCreate<boolean>('mirrorEnabled', this.data.mirrorEnabled);
@@ -181,6 +189,8 @@ export class SettingsStore {
     AppStorage.setOrCreate<string>('lastRemoteGeneratedAt', this.data.lastRemoteGeneratedAt);
     AppStorage.setOrCreate<string>('themeMode', this.data.themeMode);
     AppStorage.setOrCreate<string>('listDensity', this.data.listDensity);
+    AppStorage.setOrCreate<string>('sortId', this.data.sortId);
+    AppStorage.setOrCreate<boolean>('autoDownloadLatest', this.data.autoDownloadLatest);
     AppStorage.setOrCreate<boolean>('mirrorEnabled', this.data.mirrorEnabled);
     AppStorage.setOrCreate<string>('mirrorId', this.data.mirrorId);
     AppStorage.setOrCreate<string>('mirrorTemplate', this.data.mirrorTemplate);
@@ -226,6 +236,8 @@ export class SettingsStore {
       base.lastRemoteGeneratedAt = parsed.lastRemoteGeneratedAt ?? '';
       base.themeMode = parsed.themeMode ?? 'system';
       base.listDensity = parsed.listDensity ?? 'normal';
+      base.sortId = parsed.sortId ?? 'updated';
+      base.autoDownloadLatest = parsed.autoDownloadLatest ?? true;
       base.mirrorEnabled = parsed.mirrorEnabled ?? false;
       base.mirrorId = parsed.mirrorId ?? MIRROR_DIRECT_ID;
       base.customTemplate = parsed.customTemplate ?? '';

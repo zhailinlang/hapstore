@@ -8,11 +8,14 @@ import {
   appReleases,
   formatDate,
   formatSize,
-  primaryAsset,
+  preferredAsset,
   statusText
 } from '../model/AppInfo';
 import { uriDisplayName } from '../model/SettingsData';
+import { DownloadRecord, DL_DONE, DL_DOWNLOADING, DL_PAUSED } from '../model/DownloadRecord';
 import { DownloadMeta, DownloadService } from '../service/DownloadService';
+import { DownloadStore } from '../service/DownloadStore';
+import { ExtractResult, ZipExtractor } from '../service/ZipExtractor';
 import { MirrorService } from '../service/MirrorService';
 import { NetworkService } from '../service/NetworkService';
 import { SettingsStore } from '../service/SettingsStore';
@@ -26,6 +29,8 @@ struct DetailPage {
   @State downloading: boolean = false;
   @State progressText: string = '';
   @State percent: number = 0;
+  /** 移动网络下跳过了自动下载，页面上给个提示 */
+  @State autoSkipped: boolean = false;
 
   aboutToAppear(): void {
     const params: object = router.getParams() as object;
@@ -35,6 +40,63 @@ struct DetailPage {
         this.app = JSON.parse(raw) as AppInfo;
       }
     }
+    // 打开应用即拉取最新版：进详情页就自动下，下完直接进装机流程
+    this.autoFetchLatest();
+  }
+
+  /**
+   * 自动下载最新版。
+   *
+   * 条件：开关开着、当前有可下的包、这个版本本地还没下过、且不是移动网络。
+   * 已经下过的（同一资产 + 同一版本）不再重复消耗流量。
+   *
+   * 移动网络下不自动下：不少 HAP 有上百 MB，用户可能只是想看看详情。
+   * 这种情况下在页面上留个按钮，手动一点更稳妥（见 build 里的「下载最新版」按钮）。
+   */
+  private async autoFetchLatest(): Promise<void> {
+    const settings = SettingsStore.shared().get();
+    if (!settings.autoDownloadLatest) {
+      return;
+    }
+    if (NetworkService.isCellular()) {
+      this.autoSkipped = true;
+      return;
+    }
+    const app: AppInfo | null = this.app;
+    if (!app) {
+      return;
+    }
+    const asset: AssetInfo | undefined = preferredAsset(app);
+    if (!asset) {
+      return;
+    }
+    const tag: string = this.latestTag();
+    if (this.alreadyDownloaded(app.id, asset.name, tag)) {
+      return;
+    }
+    await this.startDownload(asset, tag, true);
+  }
+
+  /** 本地是否已有这个应用这个版本的下载记录（成功或进行中都算）。 */
+  private alreadyDownloaded(appId: string, assetName: string, tag: string): boolean {
+    const ctx: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
+    const records: DownloadRecord[] = new DownloadStore(ctx).list();
+    for (let i = 0; i < records.length; i++) {
+      const rec: DownloadRecord = records[i];
+      if (rec.appId !== appId) {
+        continue;
+      }
+      if (rec.assetName !== assetName) {
+        continue;
+      }
+      if (rec.tag !== tag) {
+        continue;
+      }
+      if (rec.status === DL_DONE || rec.status === DL_DOWNLOADING || rec.status === DL_PAUSED) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /** 最新版的 HAP，用于详情页顶部的主下载按钮。 */
@@ -42,7 +104,7 @@ struct DetailPage {
     if (!this.app) {
       return undefined;
     }
-    return primaryAsset(this.app);
+    return preferredAsset(this.app);
   }
 
   private latestTag(): string {
@@ -50,7 +112,7 @@ struct DetailPage {
     return rels.length > 0 ? rels[0].tag : '';
   }
 
-  async startDownload(asset: AssetInfo, tag: string): Promise<void> {
+  async startDownload(asset: AssetInfo, tag: string, auto: boolean = false): Promise<void> {
     if (!this.app || this.downloading) {
       return;
     }
@@ -62,17 +124,17 @@ struct DetailPage {
         buttons: [{ text: '取消', color: '#8A8F99' }, { text: '继续', color: '#0F62FE' }]
       }).then((res) => {
         if (res.index === 1) {
-          this.doDownload(asset, tag);
+          this.doDownload(asset, tag, auto);
         }
       }).catch(() => {
         // 用户取消
       });
       return;
     }
-    this.doDownload(asset, tag);
+    this.doDownload(asset, tag, auto);
   }
 
-  async doDownload(asset: AssetInfo, tag: string): Promise<void> {
+  async doDownload(asset: AssetInfo, tag: string, auto: boolean = false): Promise<void> {
     if (!this.app || this.downloading) {
       return;
     }
@@ -100,12 +162,43 @@ struct DetailPage {
           this.progressText = text;
         }
       });
+      const localPath: string = service.latestLocalPath(meta.appId ?? '', asset.name);
+      // zip 包：先解压出里面的 HAP，再走同一条装机流程
+      let installPath: string = localPath;
+      // 引导页展示的文件名：要指向真正要装的那个文件（zip 场景是解出来的 HAP）
+      let installName: string = asset.name;
+      if (asset.isZip === true && localPath.length > 0) {
+        const ex: ExtractResult = await new ZipExtractor(ctx).extract(localPath);
+        if (ex.hapPath.length > 0) {
+          installPath = ex.hapPath;
+          installName = ex.hapPath.substring(ex.hapPath.lastIndexOf('/') + 1);
+        } else {
+          promptAction.showToast({ message: `压缩包已下载，但${ex.message}` });
+        }
+      }
+      const guideName: string = installPath.length > 0
+        ? installName
+        : (savedUri.length > 0 ? uriDisplayName(savedUri) : asset.name);
+      if (auto) {
+        // 自动下载：不打扰用户，进度条走完就转到装机页
+        promptAction.showToast({ message: '最新版已下载' });
+        router.pushUrl({
+          url: 'pages/InstallGuidePage',
+          params: {
+            fileName: guideName,
+            saveUri: savedUri,
+            localPath: installPath
+          }
+        });
+        return;
+      }
       if (SettingsStore.shared().get().autoOpenInstallGuide) {
         router.pushUrl({
           url: 'pages/InstallGuidePage',
           params: {
-            fileName: savedUri.length > 0 ? uriDisplayName(savedUri) : asset.name,
-            saveUri: savedUri
+            fileName: guideName,
+            saveUri: savedUri,
+            localPath: installPath
           }
         });
       } else {
@@ -223,6 +316,13 @@ struct DetailPage {
 
             // 直接下载最新版：系统限制第三方静默安装，这里只负责把 HAP 拉下来
             if (this.latestAsset() !== undefined) {
+              if (this.autoSkipped) {
+                Text('当前是移动网络，已跳过自动下载，可手动点下面的按钮')
+                  .fontSize(11)
+                  .fontColor(Theme.warning)
+                  .width('100%')
+                  .padding({ left: 16, right: 16, bottom: 6 })
+              }
               Button(`下载最新版 · ${formatSize(this.latestAsset()?.size ?? 0)}`)
                 .width('100%')
                 .height(46)
@@ -243,7 +343,15 @@ struct DetailPage {
                 .fontColor(Theme.textSub)
                 .width('100%')
                 .textAlign(TextAlign.Center)
-                .padding({ left: 16, right: 16, bottom: 12 })
+                .padding({ left: 16, right: 16, bottom: 4 })
+              if (this.latestAsset()?.isZip === true) {
+                Text('上游发布的是压缩包，下载后会自动解压出 HAP')
+                  .fontSize(11)
+                  .fontColor(Theme.primary)
+                  .width('100%')
+                  .textAlign(TextAlign.Center)
+                  .padding({ left: 16, right: 16, bottom: 12 })
+              }
             }
 
             Text(this.app.desc)
@@ -318,6 +426,57 @@ struct DetailPage {
     .backgroundColor(Theme.background)
   }
 
+  /** 单个资产行：名称、体积、复制链接、下载。zip 会多一个「解压后安装」标注。 */
+  @Builder
+  AssetRow(asset: AssetInfo, tag: string) {
+    Row() {
+      Column({ space: 2 }) {
+        Text(asset.name)
+          .fontSize(14)
+          .fontColor(Theme.textMain)
+          .maxLines(1)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+        Row({ space: 6 }) {
+          Text(formatSize(asset.size))
+            .fontSize(12)
+            .fontColor(Theme.textSub)
+          if (asset.isZip === true) {
+            Text('压缩包 · 下载后自动解压安装')
+              .fontSize(11)
+              .fontColor(Theme.primary)
+          }
+        }
+      }
+      .alignItems(HorizontalAlign.Start)
+      .layoutWeight(1)
+
+      Text('复制链接')
+        .fontSize(12)
+        .fontColor(Theme.primary)
+        .padding({ left: 8, right: 8, top: 5, bottom: 5 })
+        .borderRadius(14)
+        .backgroundColor(Theme.primaryLight)
+        .flexShrink(0)
+        .onClick(() => {
+          this.copyLink(asset.downloadUrl);
+        })
+
+      Button(this.downloading ? '下载中' : '下载')
+        .fontSize(13)
+        .height(34)
+        .borderRadius(17)
+        .enabled(!this.downloading)
+        .flexShrink(0)
+        .onClick(() => {
+          this.startDownload(asset, tag.length > 0 ? tag : '');
+        })
+    }
+    .width('100%')
+    .padding(12)
+    .borderRadius(10)
+    .backgroundColor(Theme.card)
+  }
+
   @Builder
   BackButton() {
     Text('←')
@@ -358,7 +517,7 @@ struct DetailPage {
       }
       .width('100%')
 
-      if ((rel.hapAssets ?? []).length === 0) {
+      if ((rel.hapAssets ?? []).length === 0 && (rel.hapZipAssets ?? []).length === 0) {
         Text('该版本没有 HAP 文件')
           .fontSize(12)
           .fontColor(Theme.textSub)
@@ -367,46 +526,12 @@ struct DetailPage {
       } else {
         Column({ space: 8 }) {
           ForEach(rel.hapAssets ?? [], (asset: AssetInfo) => {
-            Row() {
-              Column({ space: 2 }) {
-                Text(asset.name)
-                  .fontSize(14)
-                  .fontColor(Theme.textMain)
-                  .maxLines(1)
-                  .textOverflow({ overflow: TextOverflow.Ellipsis })
-                Text(formatSize(asset.size))
-                  .fontSize(12)
-                  .fontColor(Theme.textSub)
-              }
-              .alignItems(HorizontalAlign.Start)
-              .layoutWeight(1)
-
-              Text('复制链接')
-                .fontSize(12)
-                .fontColor(Theme.primary)
-                .padding({ left: 8, right: 8, top: 5, bottom: 5 })
-                .borderRadius(14)
-                .backgroundColor(Theme.primaryLight)
-                .flexShrink(0)
-                .onClick(() => {
-                  this.copyLink(asset.downloadUrl);
-                })
-
-              Button(this.downloading ? '下载中' : '下载')
-                .fontSize(13)
-                .height(34)
-                .borderRadius(17)
-                .enabled(!this.downloading)
-                .flexShrink(0)
-                .onClick(() => {
-                  this.startDownload(asset, rel.tag.length > 0 ? rel.tag : '');
-                })
-            }
-            .width('100%')
-            .padding(12)
-            .borderRadius(10)
-            .backgroundColor(Theme.card)
+            this.AssetRow(asset, rel.tag)
           }, (asset: AssetInfo) => asset.name)
+
+          ForEach(rel.hapZipAssets ?? [], (asset: AssetInfo) => {
+            this.AssetRow(asset, rel.tag)
+          }, (asset: AssetInfo) => `zip_${asset.name}`)
         }
         .width('100%')
       }

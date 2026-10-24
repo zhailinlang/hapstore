@@ -6,6 +6,7 @@ import { DownloadItem, DL_DONE, DL_DOWNLOADING, DL_FAILED, DL_PAUSED } from '../
 import { uriDisplayName } from '../model/SettingsData';
 import { DownloadService } from '../service/DownloadService';
 import { DownloadStore } from '../service/DownloadStore';
+import { HandOffResult, InstallerBridge } from '../service/InstallerBridge';
 import { MirrorService } from '../service/MirrorService';
 import { Theme } from '../common/constants/ThemeConstants';
 
@@ -142,6 +143,7 @@ export struct DownloadItemCard {
           this.ActionChip('重试', 'retry')
         }
         if (this.item.status === DL_DONE) {
+          this.ActionChip('装机', 'install')
           this.ActionChip('安装引导', 'guide')
         }
         if (this.item.status === DL_DONE && this.item.localPath.length > 0) {
@@ -187,12 +189,29 @@ export struct DownloadItemCard {
       } else if (action === 'retry') {
         await service.retry(this.item.tid);
         promptAction.showToast({ message: '已重新发起下载' });
+      } else if (action === 'install') {
+        const r: HandOffResult =
+          await InstallerBridge.handOff(ctx, this.item.localPath, this.item.saveUri);
+        promptAction.showToast({ message: InstallerBridge.messageOf(r) });
+        if (r === 'missing') {
+          router.pushUrl({
+            url: 'pages/InstallGuidePage',
+            params: {
+              fileName: this.item.fileName,
+              saveUri: this.item.saveUri,
+              localPath: this.item.localPath,
+              needInstaller: '1'
+            }
+          });
+        }
+        return;
       } else if (action === 'guide') {
         router.pushUrl({
           url: 'pages/InstallGuidePage',
           params: {
             fileName: this.item.saveUri.length > 0 ? uriDisplayName(this.item.saveUri) : this.item.fileName,
-            saveUri: this.item.saveUri
+            saveUri: this.item.saveUri,
+            localPath: this.item.localPath
           }
         });
         return;

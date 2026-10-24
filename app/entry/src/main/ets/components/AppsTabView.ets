@@ -1,8 +1,9 @@
 import { common } from '@kit.AbilityKit';
 import { router } from '@kit.ArkUI';
-import { AppInfo, CategoryInfo, Dimensions, StoreData } from '../model/AppInfo';
+import { AppInfo, CategoryInfo, Dimensions, StoreData, SORT_OPTIONS, sortApps, sortOptionLabel } from '../model/AppInfo';
 import { StoreRepository } from '../service/StoreRepository';
 import { DownloadStore } from '../service/DownloadStore';
+import { SettingsStore } from '../service/SettingsStore';
 import { AppCardView } from './AppCard';
 import { Theme } from '../common/constants/ThemeConstants';
 
@@ -79,6 +80,8 @@ export struct AppsTabView {
   @State selectedTags: string[] = [];
   @State keyword: string = '';
   @State showFilter: boolean = false;
+  /** 排序方式，默认「最近更新」，设置里持久化 */
+  @State sortId: string = 'updated';
   @StorageLink('activeDownloads') activeDownloads: number = 0;
   /** 远端数据应用后由设置/更新页自增，这里感知并重载 */
   @StorageLink('storeEpoch') @Watch('onStoreEpoch') epoch: number = 0;
@@ -87,6 +90,7 @@ export struct AppsTabView {
   aboutToAppear(): void {
     const ctx: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
     const repo: StoreRepository = new StoreRepository(ctx);
+    this.sortId = SettingsStore.shared().get().sortId;
     repo.load().then((d: StoreData) => {
       this.data = d;
       this.loading = false;
@@ -209,6 +213,22 @@ export struct AppsTabView {
     return false;
   }
 
+  /**
+   * 搜索用的文本：把可搜字段拼成一条小写字符串。
+   *
+   * 坑：之前写成 `A + B + C.toLowerCase()`，运算符优先级让 toLowerCase 只作用在
+   * 最后一段模板串上，name/desc/repo/tags 全是原始大小写。结果搜小写的
+   * "mindustry" 匹配不到 "MindustryArk"、搜 "flutter" 匹配不到标签 "Flutter"，
+   * 表现为「搜不到任何东西」。这里统一先拼后整体转小写。
+   */
+  private searchText(app: AppInfo): string {
+    const raw: string =
+      `${app.name} ${app.desc} ${app.owner} ${app.repo} ${app.category} ` +
+      `${app.funcType ?? ''} ${(app.tags ?? []).join(' ')} ` +
+      `${(app.deviceTypes ?? []).join(' ')}`;
+    return raw.toLowerCase();
+  }
+
   private matchApp(app: AppInfo): boolean {
     if (this.activeFunc !== 'all' && (app.funcType ?? '') !== this.activeFunc) {
       return false;
@@ -221,12 +241,17 @@ export struct AppsTabView {
     }
     const kw: string = this.keyword.trim().toLowerCase();
     if (kw.length > 0) {
-      const hay: string =
-        `${app.name} ${app.desc} ${app.repo} ${app.category} ` +
-        `${app.funcType ?? ''} ${(app.tags ?? []).join(' ')} ` +
-        `${(app.deviceTypes ?? []).join(' ')}`.toLowerCase();
-      if (hay.indexOf(kw) < 0) {
-        return false;
+      const hay: string = this.searchText(app);
+      // 空格分词，全部命中才算匹配（AND 语义）
+      const words: string[] = kw.split(/\s+/);
+      for (let i = 0; i < words.length; i++) {
+        const w: string = words[i];
+        if (w.length === 0) {
+          continue;
+        }
+        if (hay.indexOf(w) < 0) {
+          return false;
+        }
       }
     }
     return true;
@@ -249,7 +274,20 @@ export struct AppsTabView {
         }
       }
     }
+    sortApps(list, this.sortId);
     return list;
+  }
+
+  /** 排序下拉。 */
+  private cycleSort(): void {
+    const ids: string[] = [];
+    for (let i = 0; i < SORT_OPTIONS.length; i++) {
+      ids.push(SORT_OPTIONS[i].id);
+    }
+    const cur: number = ids.indexOf(this.sortId);
+    const next: string = ids[(cur + 1) % ids.length];
+    this.sortId = next;
+    SettingsStore.shared().apply({ sortId: next });
   }
 
   clearFilter(): void {
@@ -320,6 +358,29 @@ export struct AppsTabView {
           .onChange((value: string) => {
             this.keyword = value;
           })
+
+        // 排序：点一下在几种排序间轮换，长文本直接显示当前方式
+        Row({ space: 6 }) {
+          Text('排序')
+            .fontSize(12)
+            .fontColor(Theme.textSub)
+          Text(sortOptionLabel(this.sortId))
+            .fontSize(12)
+            .fontColor(Theme.primary)
+            .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+            .borderRadius(12)
+            .backgroundColor(Theme.primaryLight)
+            .onClick(() => {
+              this.cycleSort();
+            })
+          Blank()
+          Text(`共 ${this.getApps().length} 个`)
+            .fontSize(12)
+            .fontColor(Theme.textSub)
+        }
+        .width('100%')
+        .padding({ left: 16, right: 16, bottom: 8 })
+        .alignItems(VerticalAlign.Center)
 
         // 分类：默认筛选维度，横向可滚动 + 右侧筛选按钮
         Row({ space: 8 }) {

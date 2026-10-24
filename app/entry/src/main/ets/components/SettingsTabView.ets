@@ -23,6 +23,8 @@ const THEME_OPTIONS: string[] = ['system', 'light', 'dark'];
 const THEME_LABELS: string[] = ['跟随系统', '浅色', '深色'];
 const INTERVALS: number[] = [6, 12, 24, 72];
 const INTERVAL_LABELS: string[] = ['6 小时', '12 小时', '24 小时', '72 小时'];
+const SORT_IDS: string[] = ['updated', 'name', 'size', 'downloadable'];
+const SORT_LABELS: string[] = ['最近更新', '名称', '体积', '可下载优先'];
 
 function colorModeOf(mode: string): ConfigurationConstant.ColorMode {
   if (mode === 'light') {
@@ -100,6 +102,8 @@ export struct SettingsTabView {
   @StorageProp('downloadRootUri') downloadRootUri: string = '';
   @StorageProp('downloadRootName') downloadRootName: string = '';
   @StorageProp('appendVersionToName') appendVersionToName: boolean = true;
+  @StorageProp('autoDownloadLatest') autoDownloadLatest: boolean = true;
+  @StorageProp('sortId') sortId: string = 'updated';
 
   @State testing: boolean = false;
   @State results: SpeedResult[] = [];
@@ -673,6 +677,20 @@ export struct SettingsTabView {
             SettingsStore.shared().apply({ listDensity: v === '紧凑' ? 'compact' : 'normal' });
           }
         })
+        Text('默认排序')
+          .fontSize(13)
+          .fontColor(Theme.textSub)
+          .width('100%')
+        ChipPickView({
+          options: SORT_LABELS,
+          selected: SORT_LABELS[SORT_IDS.indexOf(this.sortId)] ?? SORT_LABELS[0],
+          onPick: (v: string) => {
+            const idx: number = SORT_IDS.indexOf(v);
+            if (idx >= 0) {
+              SettingsStore.shared().apply({ sortId: SORT_IDS[idx] });
+            }
+          }
+        })
       }
       .width('100%')
       .padding(14)
@@ -727,6 +745,11 @@ export struct SettingsTabView {
             SettingsStore.shared().apply({ appendVersionToName: v });
           })
 
+        this.SwitchRow('打开应用即下载最新版',
+          '进入应用详情页自动拉取并下载该应用最新版，下完直接进装机流程。已下载过同一版本的不重复下载',
+          this.autoDownloadLatest, (v: boolean) => {
+            SettingsStore.shared().apply({ autoDownloadLatest: v });
+          })
         this.SwitchRow('下载完成后弹出安装引导', '关闭则只提示完成；引导页里也能一键「不再提示」',
           this.autoOpenInstallGuide, (v: boolean) => {
             SettingsStore.shared().apply({ autoOpenInstallGuide: v });

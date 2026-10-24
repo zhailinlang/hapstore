@@ -52,6 +52,10 @@ export interface SettingsData {
   themeMode: string;
   /** compact / normal */
   listDensity: string;
+  /** 列表排序：updated / name / size / downloadable */
+  sortId: string;
+  /** 打开应用详情页时自动拉取并下载最新版 */
+  autoDownloadLatest: boolean;
   mirrorEnabled: boolean;
   mirrorId: string;
   /** 生效中的模板，由 mirrorId 或自定义推导（不落盘，每次启动时重算，避免残缺模板被持久化） */
@@ -88,6 +92,8 @@ export function DEFAULT_SETTINGS(): SettingsData {
     lastRemoteGeneratedAt: '',
     themeMode: 'system',
     listDensity: 'normal',
+    sortId: 'updated',
+    autoDownloadLatest: true,
     mirrorEnabled: false,
     mirrorId: MIRROR_DIRECT_ID,
     mirrorTemplate: '',
@@ -114,6 +120,8 @@ export interface SettingsPatch {
   lastRemoteGeneratedAt?: string;
   themeMode?: string;
   listDensity?: string;
+  sortId?: string;
+  autoDownloadLatest?: boolean;
   mirrorEnabled?: boolean;
   mirrorId?: string;
   mirrorTemplate?: string;

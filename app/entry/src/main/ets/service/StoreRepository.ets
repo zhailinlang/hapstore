@@ -1,7 +1,7 @@
 import { common } from '@kit.AbilityKit';
 import { fileIo } from '@kit.CoreFileKit';
 import { util } from '@kit.ArkTS';
-import { AppInfo, StoreData } from '../model/AppInfo';
+import { AppInfo, ReleaseInfo, StoreData } from '../model/AppInfo';
 import { StoreCache } from './StoreCache';
 
 const RAW_FILE = 'apps.json';
@@ -158,6 +158,9 @@ export class StoreRepository {
         if (!apps[j].hapAssets) {
           apps[j].hapAssets = [];
         }
+        if (!apps[j].hapZipAssets) {
+          apps[j].hapZipAssets = [];
+        }
         if (!apps[j].otherAssets) {
           apps[j].otherAssets = [];
         }
@@ -172,6 +175,19 @@ export class StoreRepository {
         }
         if (!apps[j].funcType) {
           apps[j].funcType = '';
+        }
+        // releases 里的每一项也要补齐，老快照没有 hapZipAssets
+        const rels: ReleaseInfo[] = apps[j].releases ?? [];
+        for (let k = 0; k < rels.length; k++) {
+          if (!rels[k].hapAssets) {
+            rels[k].hapAssets = [];
+          }
+          if (!rels[k].hapZipAssets) {
+            rels[k].hapZipAssets = [];
+          }
+          if (!rels[k].otherAssets) {
+            rels[k].otherAssets = [];
+          }
         }
       }
     }

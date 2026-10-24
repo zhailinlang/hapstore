@@ -134,8 +134,50 @@ CDN 不同步是常态：Release 资产约 1-2 分钟刷新，raw 兜底 5 分�
 
 ## App 侧能力边界
 
-写代码前值得知道的两条硬限制：
+写代码前值得知道的几条硬限制：
 
-- **不能静默安装**：SDK 里没有任何安装 API，`INSTALL_BUNDLE` 是 `system_basic` 权限。
+- **不能静默安装**：SDK 里没有任何安装 API，`INSTALL_BUNDLE` 是 `system_core` 权限。
   App 自更新只能做到「下载新版 → 跳 InstallGuidePage」，装的那一步必须用户手动确认。
+- **但可以走 hdc 调试通道**：把 HAP 通过 want 转交给已授权调试通道的装机工具
+  （如小白调试助手 `com.xiaobai.hap_installer`），由它完成安装。
+  见 `service/InstallerBridge.ets`，不占任何安装权限，也不碰签名。
 - **没有后台下载**：`request.agent.Mode.FOREGROUND`，`module.json5` 也未声明后台任务权限。
+
+---
+
+## 数据结构变更记录
+
+| 变更 | 字段 | 说明 |
+|---|---|---|
+| schemaVersion 2 | `hapAssets` / `otherAssets` | 初始结构，`otherAssets` 装的是非 HAP 文件 |
+| 新增（未升 schema） | `hapZipAssets` | 装着 HAP 的 zip 包。`split_assets` 从 `otherAssets` 里分出来，App 侧解压后装机 |
+| 新增（未升 schema） | `AssetInfo.isZip` | 标记该资产是压缩包，UI 上显示「下载后自动解压安装」 |
+| 新增（未升 schema） | `ReleaseInfo.hapZipAssets` | 同上，按 release 分别记录 |
+
+**未升 schemaVersion 的原因**：新字段全是可选，老 App 读新数据时解析不出 `hapZipAssets`，
+会当成没有 zip —— 行为退回到旧版本，不会崩。等 App 侧也发新版后再考虑升 schema。
+
+### 离线重跑分类
+
+`sync/sync.py` 的资产分类规则改了以后，不用等 4 分钟全量重抓：
+
+```bash
+python3 sync/backfill_zip.py
+```
+
+它读 `state.json` 里已缓存的原始资产，离线重跑一遍 `split_assets` 再重写 `apps.json`。
+**前提**：`state.json` 里存的资产字段名是 `downloadUrl`，而 GitHub API 原始字段是
+`browser_download_url` —— `split_assets` 两种都认，但自己写脚本处理 state 时别踩这个坑。
+
+---
+
+## zip 包的三种结构（实测）
+
+| 包 | 结构 | 处理 |
+|---|---|---|
+| `entry-default-20260516.zip`（HiSH） | zip → 直接是 `.hap` | 解压即得 |
+| `CanPlayer.zip` | zip → `.app` → **.app 本身是 zip** → `entry-default.hap` | 递归解两层 |
+| `MindustryArk-*-payload.zip` | payload 包 | 同上，按 `.hap` 找 |
+
+`service/ZipExtractor.ets` 负责递归解包（最多 3 层），碰到 `.app` 会再解一次。
+

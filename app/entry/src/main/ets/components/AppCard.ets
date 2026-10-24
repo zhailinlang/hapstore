@@ -1,4 +1,4 @@
-import { AppInfo, formatDate, formatSize, primaryAsset, statusText } from '../model/AppInfo';
+import { AppInfo, formatDate, formatSize, preferredAsset, statusText } from '../model/AppInfo';
 import { Theme } from '../common/constants/ThemeConstants';
 import { AppIconView } from './AppIcon';
 
@@ -39,9 +39,17 @@ export function AppCardView(app: AppInfo, onClick: () => void, density?: string)
             .fontSize(11)
             .fontColor(Theme.primary)
         }
-        Text(formatSize(primaryAsset(app)?.size ?? 0))
+        Text(formatSize(preferredAsset(app)?.size ?? 0))
           .fontSize(11)
           .fontColor(Theme.textSub)
+        if (preferredAsset(app)?.isZip === true) {
+          Text('压缩包')
+            .fontSize(10)
+            .fontColor(Theme.textSub)
+            .padding({ left: 5, right: 5, top: 1, bottom: 1 })
+            .borderRadius(4)
+            .backgroundColor(Theme.chipBg)
+        }
         Text(formatDate(app.updatedAt))
           .fontSize(11)
           .fontColor(Theme.textSub)
