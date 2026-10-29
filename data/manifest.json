@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-29T05:13:21+08:00",
+  "generatedAt": "2026-10-29T17:48:11+08:00",
   "repo": "zhailinlang/hapstore",
   "snapshot": {
     "url": "https://github.com/zhailinlang/hapstore/releases/download/snapshot-latest/apps.json",
@@ -12,17 +12,17 @@
     "minAppVersionCode": 1000000
   },
   "app": {
-    "versionCode": 1000001,
-    "versionName": "1.0.1",
-    "tag": "v1.0.1",
-    "downloadUrl": "https://github.com/zhailinlang/hapstore/releases/download/v1.0.1/HapStore-v1.0.1-signed.hap",
-    "size": 1841025,
-    "sha256": "f30c6635caaa4a290fd467c88df3e4889b62c4d41b04fa06ff30a3ba5bd61fff",
-    "publishedAt": "2026-10-24T23:31:16+08:00",
+    "versionCode": 1000002,
+    "versionName": "1.0.2",
+    "tag": "v1.0.2",
+    "downloadUrl": "https://github.com/zhailinlang/hapstore/releases/download/v1.0.2/HapStore-v1.0.2-signed.hap",
+    "size": 1876113,
+    "sha256": "db601611d02b3d2c40852a84bdf5dff24ed921d068bcf4b71a98631ec98fb84b",
+    "publishedAt": "2026-10-29T17:48:11+08:00",
     "releaseUrl": "https://github.com/zhailinlang/hapstore/releases/latest",
-    "notes": "HapStore v1.0.1\n\n一次「让更新这件事自己跑起来」的版本，同时补上了几处实用性功能。\n\n---\n\n## ✨ 本版重点：打开 App 就更新，不用手动点\n\n**启动自动检查更新（默认开启）**\n打开 App 会自动拉一次最新快照，有变化或出问题时弹提示告诉你结果：\n\n- 有更新 → 提示「更新成功：新增 N 个、版本更新 N 个、移除 N 个」\n- 出问题 → 提示**具体原因**（没配数据源 / 没网 / 地址 404 / 格式版本不兼容 / 解析失败）\n- 已是最新 → 静默，不打扰你\n\n可以在「设置 → 数据源与检查更新」里关掉，也可以选 6 / 12 / 24 / 72 小时的检查间隔。\n\n**「检查更新」按钮改为一键完成**\n以前要点两下：先看差异，再点「应用更新到本机数据」。\n现在点一次就跑完整个流程：**拉取最新快照 → 比对差异 → 直接写入本机生效**，\n同时顺带检查 HapStore 自身有没有新版本。不再有需要确认的中间态。\n\n---\n\n## 🆕 新增\n\n**列表排序**\n支持按「最近更新 / 名称 / 体积 / 可下载优先」切换排序，选择会记住。\n\n**zip 包里的 HAP 也能装**\n有些上游把 HAP 打包在 zip 里发布，甚至套了两层（`zip → .app → .hap`）。\nApp 会自动识别并递归解开，然后引导你装真正的 HAP。目前有 9 个应用是这种形态。\n\n**交给小白调试助手装**\n如果你装了**小白调试助手**，下载完可以直接把 HAP 交给它代装，不用手动去选文件。\n\n---\n\n## 🐛 修复\n\n**搜索大小写不敏感**\n搜 `bet` 能命中 `Bettbox`、搜 `CanPlayer` 能精确命中 `CanPlayerHap` —— 之前大小写处理有偏差。\n\n**打开详情即开始下载**\n进入应用详情页会自动拉起下载，不再多点一次。\n\n---\n\n## 📦 顺带更新\n\n- 内置快照更新到 **108 个应用 / 91 个可下载**（此前是 87 / 68）\n- 「更新」页移除了「最近更新」时间线区块 —— 首页已经默认按最近更新排序了，那块是重复信息\n- 界面截图与 README 同步更新\n\n---\n\n## 📄 安装\n\n| 文件 | 用途 |\n|---|---|\n| `HapStore-v1.0.1-signed.hap` | 签名版，**绝大多数人下这个**，可直接安装 |\n| `HapStore-v1.0.1-unsigned.hap` | 未签名版，供你用自己的证书重签后安装 |\n\n```bash\nhdc install HapStore-v1.0.1-signed.hap\n```\n\n未签名版**装不上真机** —— 鸿蒙要求 HAP 必须签名。\n\n从 v1.0.0 升级可以直接覆盖安装，设置和下载记录都会保留。",
-    "unsignedUrl": "https://github.com/zhailinlang/hapstore/releases/download/v1.0.1/HapStore-v1.0.1-unsigned.hap",
-    "unsignedSize": 1793393,
-    "unsignedSha256": "3917d9260eef0b0b01ca0373b499b9f093c318482702ad0fee0fa875397e1235"
+    "notes": "HapStore v1.0.2\n\n## 本版重点\n\n**修正「最近更新」排序** —— 这是 v1.0.1 之后反馈最多的问题。\n\n之前列表排序用的是「最新 Release 的发布时间」，但卡片上显示的日期却是「清单条目最近被改过的时间」。\n两个字段都叫日期但语义不同，混在一起就出现了两种自相矛盾的现象：\n\n- 没发过 Release 的应用，因为条目更新时间较新被插进排序中间（曾经有应用排到第 4 位，把真正有新版本的应用挤下去）\n- 排在最前面的应用，显示的却是一个更早的日期，看着就像排序坏了\n\n现在改为**排序依据与显示依据同源**：\n\n- 新增 `hasReleaseTime()` 判断应用是否真有带发布时间的 Release\n- 「最近更新」分两档：有 Release 的按发布时间倒序在前，没有的统一沉到列表末尾，不再插队\n- 卡片显示日期改用最新一次 Release 的发布时间，和排序严格一致\n- 卡片版本号统一取最新 Release 的 tag（原来只读清单里的 `release` 字段，可能是旧的）\n\n## 新增\n\n- README 截图全部重截，首页 / 详情 / 更新 / 设置四张与当前版本一致（112 个应用）\n- README 数据校正：112 个应用、93 个可下载、分类 62 / 42 / 8\n\n## 修复\n\n- 「更新」Tab 移除底部冗余的「最近更新」时间线区块 —— 首页已经按最近更新排序，这里是重复信息\n- `appSortTime()` 改为遍历所有 Release 取最新时间，不再依赖数组顺序（数组里第一个不保证是最新的）\n\n## 顺带更新\n\n- 内置快照同步到 2026-10-28（112 应用 / 93 可下载），离线可用范围更大\n\n---\n\n**HapStore-v1.0.2-signed.hap** —— 签名版，可直接安装：\n`hdc install HapStore-v1.0.2-signed.hap`\n\n**HapStore-v1.0.2-unsigned.hap** —— 未签名版，供你用自己的证书重签。\n鸿蒙要求 HAP 必须签名才能安装，未签名版直接装会失败，仅在你不想用本项目证书时使用。",
+    "unsignedUrl": "https://github.com/zhailinlang/hapstore/releases/download/v1.0.2/HapStore-v1.0.2-unsigned.hap",
+    "unsignedSize": 1827458,
+    "unsignedSha256": "1f19507a65ac0ff6836b23d919a2cd5450eea53f1978e4dc146b9772b96d80cf"
   }
 }
