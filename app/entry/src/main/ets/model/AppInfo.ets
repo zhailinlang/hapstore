@@ -95,6 +95,39 @@ export function appReleases(app: AppInfo): ReleaseInfo[] {
   return app.release ? [app.release] : [];
 }
 
+/**
+ * 卡片上显示的日期。
+ *
+ * 用最新 release 的发布时间 —— 也就是「这个版本是哪天发的」，
+ * 跟列表按「最近更新」排序用的时间一致，排序和显示才对得上。
+ *
+ * 之前这里显示的是 app.updatedAt（上游清单里标的日期，语义是「清单条目
+ * 最近被改过」），跟排序依据不是一回事：会出现「排在最前面的应用显示
+ * 的是一个月前的日期」，看着就像排序错了。
+ *
+ * 没有 release 时才退回 updatedAt。
+ */
+export function appDisplayDate(app: AppInfo): string {
+  const rels: ReleaseInfo[] = appReleases(app);
+  let best: number = 0;
+  let bestRaw: string = '';
+  for (let i = 0; i < rels.length; i++) {
+    const raw: string = rels[i].publishedAt;
+    if (raw.length === 0) {
+      continue;
+    }
+    const t: number = Date.parse(raw);
+    if (!isNaN(t) && t > best) {
+      best = t;
+      bestRaw = raw;
+    }
+  }
+  if (bestRaw.length > 0) {
+    return bestRaw;
+  }
+  return app.updatedAt;
+}
+
 /** 主 HAP 资产：体积最大的那个。 */
 export function primaryAsset(app: AppInfo): AssetInfo | undefined {
   if (!app.hapAssets || app.hapAssets.length === 0) {
@@ -184,14 +217,26 @@ export function appAssetSize(app: AppInfo): number {
   return a ? a.size : 0;
 }
 
-/** 排序用的时间戳：优先 release 发布时间，其次 updatedAt。 */
+/**
+ * 排序用的时间戳：取最新 release 的发布时间。
+ *
+ * 只有拿不到 release 时间时才退回 updatedAt（上游清单里标的日期）。
+ * updatedAt 语义是「清单条目最近被改过」，不等于「发过新版本」——
+ * 有的应用只是被改了描述，日期就跟上了，用它兜底会让「暂无 Release」的应用
+ * 混进版本排序里插到中间去。
+ */
 export function appSortTime(app: AppInfo): number {
   const rels: ReleaseInfo[] = appReleases(app);
-  if (rels.length > 0 && rels[0].publishedAt.length > 0) {
-    const t: number = Date.parse(rels[0].publishedAt);
-    if (!isNaN(t)) {
-      return t;
+  // 取所有 release 里最新的发布时间，不依赖数组顺序
+  let best: number = 0;
+  for (let i = 0; i < rels.length; i++) {
+    const t: number = Date.parse(rels[i].publishedAt);
+    if (!isNaN(t) && t > best) {
+      best = t;
     }
+  }
+  if (best > 0) {
+    return best;
   }
   if (app.updatedAt.length > 0) {
     const t2: number = Date.parse(app.updatedAt);
@@ -200,6 +245,23 @@ export function appSortTime(app: AppInfo): number {
     }
   }
   return 0;
+}
+
+/**
+ * 这个应用有没有真正发过版本（有带发布时间的 release）。
+ *
+ * 「最近更新」排序时用它分档：有版本的按发布时间倒序在前，
+ * 没版本的（暂无 Release）统一沉底 —— 它们没有「新版本」可言，
+ * 混进来只会打乱按发布时间的顺序。
+ */
+export function hasReleaseTime(app: AppInfo): boolean {
+  const rels: ReleaseInfo[] = appReleases(app);
+  for (let i = 0; i < rels.length; i++) {
+    if (rels[i].publishedAt.length > 0 && !isNaN(Date.parse(rels[i].publishedAt))) {
+      return true;
+    }
+  }
+  return false;
 }
 
 /** 是不是当前能拿到安装包（有 HAP 或有 zip）。 */
@@ -307,7 +369,16 @@ export function sortApps(apps: AppInfo[], sortId: string): void {
     return;
   }
   // 默认：最近更新优先
+  //
+  // 分两档：有版本发布时间的按发布时间倒序在前；没有的（暂无 Release）沉底。
+  // 不用 updatedAt 兜底的原因是它语义是「清单条目被改过的时间」，
+  // 有些应用只是改了描述，日期就跟上了，会插到按发布时间排的中间去。
   apps.sort((a: AppInfo, b: AppInfo): number => {
+    const ha: boolean = hasReleaseTime(a);
+    const hb: boolean = hasReleaseTime(b);
+    if (ha !== hb) {
+      return ha ? -1 : 1;
+    }
     return appSortTime(b) - appSortTime(a);
   });
 }

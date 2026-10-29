@@ -1,6 +1,12 @@
-import { AppInfo, formatDate, formatSize, preferredAsset, statusText } from '../model/AppInfo';
+import { AppInfo, appDisplayDate, appReleases, formatDate, formatSize, preferredAsset, statusText } from '../model/AppInfo';
 import { Theme } from '../common/constants/ThemeConstants';
 import { AppIconView } from './AppIcon';
+
+/** 最新 release 的版本号标签；没有就空串。 */
+function latestTag(app: AppInfo): string {
+  const rels = appReleases(app);
+  return rels.length > 0 ? (rels[0].tag ?? '') : '';
+}
 
 /** 列表卡片。用全局 @Builder 而非 @Prop，避免对象深拷贝开销。density 为 compact 时更紧凑。 */
 @Builder
@@ -34,8 +40,9 @@ export function AppCardView(app: AppInfo, onClick: () => void, density?: string)
         .width('100%')
 
       Row({ space: 8 }) {
-        if (app.release && app.release.tag) {
-          Text(app.release.tag)
+        // 版本号取最新 release 的 tag，跟详情页「最近发布」保持一致
+        if (latestTag(app).length > 0) {
+          Text(latestTag(app))
             .fontSize(11)
             .fontColor(Theme.primary)
         }
@@ -50,7 +57,8 @@ export function AppCardView(app: AppInfo, onClick: () => void, density?: string)
             .borderRadius(4)
             .backgroundColor(Theme.chipBg)
         }
-        Text(formatDate(app.updatedAt))
+        // 日期跟「最近更新」排序用同一个时间源，排序和显示才一致
+        Text(formatDate(appDisplayDate(app)))
           .fontSize(11)
           .fontColor(Theme.textSub)
       }
