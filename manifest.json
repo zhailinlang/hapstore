@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-31T18:30:19+08:00",
+  "repo": "zhailinlang/hapstore",
+  "snapshot": {
+    "url": "https://github.com/zhailinlang/hapstore/releases/download/snapshot-latest/apps.json",
+    "altUrl": "https://raw.githubusercontent.com/zhailinlang/hapstore/snapshot-data/apps.json",
+    "size": 739511,
+    "sha256": "3836a2ad550158315d07079f1360509c482af3d773208557d3d4ab5db2b2b799",
+    "schemaVersion": 2,
+    "generatedAt": "2026-10-31T10:30:19+00:00",
+    "minAppVersionCode": 1000000
+  },
+  "app": {
+    "versionCode": 1000002,
+    "versionName": "1.0.2",
+    "tag": "v1.0.2",
+    "downloadUrl": "https://github.com/zhailinlang/hapstore/releases/download/v1.0.2/HapStore-v1.0.2-signed.hap",
+    "size": 1876113,
+    "sha256": "db601611d02b3d2c40852a84bdf5dff24ed921d068bcf4b71a98631ec98fb84b",
+    "publishedAt": "2026-10-29T17:48:11+08:00",
+    "releaseUrl": "https://github.com/zhailinlang/hapstore/releases/latest",
+    "notes": "HapStore v1.0.2\n\n## 本版重点\n\n**修正「最近更新」排序** —— 这是 v1.0.1 之后反馈最多的问题。\n\n之前列表排序用的是「最新 Release 的发布时间」，但卡片上显示的日期却是「清单条目最近被改过的时间」。\n两个字段都叫日期但语义不同，混在一起就出现了两种自相矛盾的现象：\n\n- 没发过 Release 的应用，因为条目更新时间较新被插进排序中间（曾经有应用排到第 4 位，把真正有新版本的应用挤下去）\n- 排在最前面的应用，显示的却是一个更早的日期，看着就像排序坏了\n\n现在改为**排序依据与显示依据同源**：\n\n- 新增 `hasReleaseTime()` 判断应用是否真有带发布时间的 Release\n- 「最近更新」分两档：有 Release 的按发布时间倒序在前，没有的统一沉到列表末尾，不再插队\n- 卡片显示日期改用最新一次 Release 的发布时间，和排序严格一致\n- 卡片版本号统一取最新 Release 的 tag（原来只读清单里的 `release` 字段，可能是旧的）\n\n## 新增\n\n- README 截图全部重截，首页 / 详情 / 更新 / 设置四张与当前版本一致（112 个应用）\n- README 数据校正：112 个应用、93 个可下载、分类 62 / 42 / 8\n\n## 修复\n\n- 「更新」Tab 移除底部冗余的「最近更新」时间线区块 —— 首页已经按最近更新排序，这里是重复信息\n- `appSortTime()` 改为遍历所有 Release 取最新时间，不再依赖数组顺序（数组里第一个不保证是最新的）\n\n## 顺带更新\n\n- 内置快照同步到 2026-10-28（112 应用 / 93 可下载），离线可用范围更大\n\n---\n\n**HapStore-v1.0.2-signed.hap** —— 签名版，可直接安装：\n`hdc install HapStore-v1.0.2-signed.hap`\n\n**HapStore-v1.0.2-unsigned.hap** —— 未签名版，供你用自己的证书重签。\n鸿蒙要求 HAP 必须签名才能安装，未签名版直接装会失败，仅在你不想用本项目证书时使用。",
+    "unsignedUrl": "https://github.com/zhailinlang/hapstore/releases/download/v1.0.2/HapStore-v1.0.2-unsigned.hap",
+    "unsignedSize": 1827458,
+    "unsignedSha256": "1f19507a65ac0ff6836b23d919a2cd5450eea53f1978e4dc146b9772b96d80cf"
+  }
+}
